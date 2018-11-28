@@ -11,6 +11,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r load packages & data}
 
 library(tidyverse)
@@ -21,51 +22,31 @@ enrollment <- read_csv("grad_enrollment_copy.csv")
 
 ```{r male vs. female grad enrollment (1967-2015)}
 
-#TO DO:
-# VISUALLY plot trends: total male (solid line) vs. female (dashed line) grad enrollment (y axis) through time (x axis)
-# STATISTICALLY
-
 ##############################
 # subset total males and females
 ##############################
 
 total_males <- enrollment %>% 
-  select(year, total_males)
+  select(year, total_males) %>% 
+  mutate(total = total_males) # change the name of "total_males" column to "total" so that we can plot males and females on same plot with same y-axis
 
 total_females <- enrollment %>% 
-  select(year, total_females)
+  select(year, total_females) %>% 
+  mutate(total = total_females) # change the name of "total_females" column to "total" so that we can plot males and females on same plot with same y-axis
 
 ##############################
 # plot trends through time
 ##############################
 
-total_enroll_plot <- ggplot(total_males, aes(x = year, y = total_males)) +
+total_enroll_plot <- ggplot(total_males, aes(x = year, y = total)) +
   geom_point(color = "gray30") +
   geom_line(color = "gray30") +
-  geom_line(data = total_females, color = "gray30", linetype = "dashed") 
-  
-  
-  geom_line(data = total_females, color = "gray30", linetype = "dashed") 
-
-
+  geom_point(data = total_females, color = "gray30", shape = 15) +
+  geom_line(data = total_females, color = "gray30", linetype = "dotted") +
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
-  labs(x = "Year", y = "Total Male & Female Graduate Student Enrollment in the U.S.")
-
-abund_traps_plot <- ggplot(abund_by_yearssite, aes(x = YEAR, y = count)) +
-  geom_point(color = "gray30") +
-  geom_line(color = "gray30") +
-  geom_point(data = traps_by_yearssite, color = "gray30") +
-  geom_line(data = traps_by_yearssite, linetype = "dashed", color = "gray30") +
-  theme_classic() +
-  theme(axis.text = element_text(color = "black"), 
-        panel.border = element_rect(colour = "black", fill=NA, size=0.7), 
-        strip.background = element_rect(fill = "grey"),
-        plot.caption = element_text(size = 10, hjust = 0)) +
-  facet_grid(~site_full) +
-  labs(x = "Year", y = "Counts") + # caption = caption1 (to include caption)
-  scale_x_continuous(breaks=c(2013, 2015, 2017))
-abund_traps_plot
-
+  labs(x = "Year", y = "Total Male & Female Graduate Student \nEnrollment in the U.S.") +
+  scale_y_continuous(labels = scales::scientific)
 ```
+
 
