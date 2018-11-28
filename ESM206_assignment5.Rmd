@@ -3,9 +3,69 @@ title: "Trends in Graduate Enrollment, Shifting Fields of Study, and Faculty Sal
 author: "Sam Csik"
 date: "11/28/2018"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load packages & data}
+
+library(tidyverse)
+
+enrollment <- read_csv("grad_enrollment_copy.csv")
+```
+
+
+```{r male vs. female grad enrollment (1967-2015)}
+
+#TO DO:
+# VISUALLY plot trends: total male (solid line) vs. female (dashed line) grad enrollment (y axis) through time (x axis)
+# STATISTICALLY
+
+##############################
+# subset total males and females
+##############################
+
+total_males <- enrollment %>% 
+  select(year, total_males)
+
+total_females <- enrollment %>% 
+  select(year, total_females)
+
+##############################
+# plot trends through time
+##############################
+
+total_enroll_plot <- ggplot(total_males, aes(x = year, y = total_males)) +
+  geom_point(color = "gray30") +
+  geom_line(color = "gray30") +
+  geom_line(data = total_females, color = "gray30", linetype = "dashed") 
+  
+  
+  geom_line(data = total_females, color = "gray30", linetype = "dashed") 
+
+
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
+  labs(x = "Year", y = "Total Male & Female Graduate Student Enrollment in the U.S.")
+
+abund_traps_plot <- ggplot(abund_by_yearssite, aes(x = YEAR, y = count)) +
+  geom_point(color = "gray30") +
+  geom_line(color = "gray30") +
+  geom_point(data = traps_by_yearssite, color = "gray30") +
+  geom_line(data = traps_by_yearssite, linetype = "dashed", color = "gray30") +
+  theme_classic() +
+  theme(axis.text = element_text(color = "black"), 
+        panel.border = element_rect(colour = "black", fill=NA, size=0.7), 
+        strip.background = element_rect(fill = "grey"),
+        plot.caption = element_text(size = 10, hjust = 0)) +
+  facet_grid(~site_full) +
+  labs(x = "Year", y = "Counts") + # caption = caption1 (to include caption)
+  scale_x_continuous(breaks=c(2013, 2015, 2017))
+abund_traps_plot
+
 ```
 
