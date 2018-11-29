@@ -99,10 +99,8 @@ per_females <- ((f_2015$total - f_1967$total)/f_1967$total) * 100 # % increase f
 ##############################
 
 female_phd <- fields %>% 
-  filter(field == "phys_earth_female" | 
-           field == "math_female" | field == "psy_soc_female" | 
-           field == "engineering_female" | field == "edu_female" | 
-           field == "humanities_arts_female" | field == "other_female") %>% 
+  filter(field == "phys_earth_female" | field == "engineering_female" | 
+           field == "edu_female" | field == "humanities_arts_female") %>% 
   select(field, `1985_raw`, `2000_raw`, `2015_raw`) %>% 
   rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`)
 
@@ -117,7 +115,11 @@ female_phd_long <- melt(female_phd, variable.name = "year", value.name = "raw")
 ##############################
 
 female_phd_plot <- ggplot(female_phd_long, aes(x = year, y = raw, fill = field)) + 
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,12000)) +
+  labs(x = "Year", y = "Female PhD Recipients")
 
 
 ```
