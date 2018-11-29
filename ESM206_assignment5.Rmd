@@ -22,17 +22,19 @@ enrollment <- read_csv("grad_enrollment_copy.csv")
 
 ```{r male vs. female grad enrollment (1967-2015)}
 
+# SOURCE: U.S. Department of Education, National Center for Education Statistics, Higher Education General Information Survey (HEGIS), “Fall Enrollment in Colleges and Universities” surveys, 1967 through 1985; Integrated Postsecondary Education Data System (IPEDS),“Fall Enrollment Survey” (IPEDS-EF:86-99); IPEDS Spring 2001 through Spring 2016, Fall Enrollment component. Accessed at: https:// nces.ed.gov/ programs/digest/ d16/ tables/ dt16_303.80.asp.
+
 ##############################
 # subset total males and females
 ##############################
 
 total_males <- enrollment %>% 
   select(year, total_males) %>% 
-  mutate(total = total_males) # change the name of "total_males" column to "total" so that we can plot males and females on same plot with same y-axis
+  mutate(total = total_males) # add column called "total" that is equal to the "total_males" column so that we can plot males and females on same plot with same y-axis
 
 total_females <- enrollment %>% 
   select(year, total_females) %>% 
-  mutate(total = total_females) # change the name of "total_females" column to "total" so that we can plot males and females on same plot with same y-axis
+  mutate(total = total_females) # add column called "total" that is equal to the "total_females" column so that we can plot males and females on same plot with same y-axis
 
 ##############################
 # plot trends through time
@@ -41,12 +43,65 @@ total_females <- enrollment %>%
 total_enroll_plot <- ggplot(total_males, aes(x = year, y = total)) +
   geom_point(color = "gray30") +
   geom_line(color = "gray30") +
-  geom_point(data = total_females, color = "gray30", shape = 15) +
+  geom_point(data = total_females, color = "gray30") +
   geom_line(data = total_females, color = "gray30", linetype = "dotted") +
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
   labs(x = "Year", y = "Total Male & Female Graduate Student \nEnrollment in the U.S.") +
   scale_y_continuous(labels = scales::scientific)
+
+# Figure 1. Male and female graduate enrollment in the U.S. (1967-2015). Male (solid line) and female (dotted line) graduate students...
+
+##############################
+# net & percent increase in total males
+##############################
+
+m_1967 <- total_males %>% # subset 1967 males
+  filter(year == 1967)
+
+m_2015 <- total_males %>% # subset 2015 males
+  filter(year == 2015)
+
+net_males <- m_2015$total - m_1967$total # net increase from 1967-2015
+perc_males <- ((m_2015$total - m_1967$total)/m_1967$total) * 100 # % increase from 1967 - 2015
+
+##############################
+# net & percent increase in total females
+##############################
+
+f_1967 <- total_females %>% # subset 1967 females
+  filter(year == 1967)
+
+f_2015 <- total_females %>% # subset 2015 females 
+  filter(year == 2015)
+
+net_females <- f_2015$total - f_1967$total # net increase from 1967-2015
+per_females <- ((f_2015$total - f_1967$total)/f_1967$total) * 100 # % increase from 1967 - 2015
+
+##############################
+# check data for assumptions of 1-way 2-sample t-test
+##############################
+
+males_hist <- ggplot(data = total_males, aes(x = total)) + # males are normally distributed
+  geom_histogram()
+males_qq <- ggplot(data = total_males, aes(sample = total)) + # may be a little concerning...
+  geom_qq()
+var.test(m_1967$total, m_2015$total) # NOT WORKING
+
+females_hist <- ggplot(data = total_females, aes(x = total)) + # not super duper normal looking
+  geom_histogram(binwidth = 75000)
+females_qq <- ggplot(data = total_females, aes(sample = total)) + # generally OK
+  geom_qq()
+var.test(f_1967$total, f_2015$total) # NOT WORKING
+
+##############################
+# conduct 1-way 2-sample t-test for males and females
+##############################
+
+t_males <- t.test(m_2015$total, m_1967$total, alternative = "greater") # SAME ERROR AS VAR.TEST
+f_males <- t.test(f_2015$total, f_1967$total, alternative = "greater") # SAME ERROR AS VAR.TEST
+
 ```
+
 
 
