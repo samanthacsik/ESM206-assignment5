@@ -283,3 +283,70 @@ fields15_chi
 
 ```
 
+##### Model describing faculty salary
+Explore relationships between
+variables in the ‘Faculty salary data (2008 - 2009 survey)’ dataset. Develop a model describing faculty
+salary based on data for faculty sex, rank, years in current position, field, and number of years since
+doctoral degree was earned. You should make decisions regarding which variables should remain in your
+final model. Describe the results qualitatively and quantitatively (i.e., don’t just report the statistical
+results of the model – make sure you describe interesting findings in text). You can also discuss any
+concerns that you have with the model(s) you present, if any.
+
+```{r all variables}
+#### all variables ####
+facsal_lm1 <- lm(salary ~ rank + discipline + years_since + years_service + sex, data = faculty_salary)
+summary(facsal_lm1)
+plot(facsal_lm1)
+
+```
+
+```{r rank, discipline, sex, years_since}
+facsal_lm2 <- lm(salary ~ rank + discipline + sex + years_since, data = faculty_salary)
+summary(facsal_lm2)
+plot(facsal_lm2)
+```
+
+```{r rank, discipline, sex, years_service}
+facsal_lm3 <- lm(salary ~ rank + discipline + sex + years_service, data = faculty_salary)
+summary(facsal_lm3)
+plot(facsal_lm3)
+# doesn't look good
+```
+
+```{r rank, discipline, sex}
+facsal_lm4 <- lm(salary ~ rank + discipline + sex, data = faculty_salary)
+summary(facsal_lm4)
+# closest adjusted r-squared to model that includes all variables
+plot(facsal_lm4)
+# this is probably the best one
+```
+
+```{r rank, discipline, years_since}
+facsal_lm5 <- lm(salary ~ rank + discipline + years_since, data = faculty_salary)
+summary(facsal_lm5)
+```
+
+```{r AIC values}
+AIC_lm1 <- AIC(facsal_lm1)
+AIC_lm1
+# 9093.826
+
+AIC_lm2 <- AIC(facsal_lm2)
+AIC_lm2
+# 9097.22
+
+AIC_lm3 <- AIC(facsal_lm3)
+AIC_lm3
+# 9096.813
+
+AIC_lm4 <- AIC(facsal_lm4)
+AIC_lm4
+# 9095.454
+
+AIC_lm5 <- AIC(facsal_lm5)
+AIC_lm5
+# 9096.497
+```
+
+
+
