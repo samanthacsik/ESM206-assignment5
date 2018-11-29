@@ -422,7 +422,6 @@ AIC_lm5
 # 9096.497
 ```
 
-
 ###References:
 
 (Figure 1) U.S. Department of Education, National Center for Education Statistics, Higher Education General Information Survey (HEGIS), "Fall Enrollment in Colleges and Universities" surveys, 1967 through 1985; Integrated Postsecondary Education Data System (IPEDS), "Fall Enrollment Survey" (IPEDS-EF:86-99); IPEDS Spring 2001 through Spring 2016, Fall Enrollment component; and Enrollment in Degree-Granting Institutions Projection Model, 2000 through 2026. Accessed at: https:// nces.ed.gov/ programs/digest/ d16/ tables/ dt16_303.80.asp.
