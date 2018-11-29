@@ -25,6 +25,7 @@ fields <- read_csv("phds_by_field_copy.csv")
 fields_85 <- read_csv("phds_field_1985.csv")
 fields_00 <- read_csv("phds_field_2000.csv")
 fields_15 <- read_csv("phds_field_2015.csv")
+faculty_salary <- read_csv("faculty_salary.csv")
 
 ```
 
