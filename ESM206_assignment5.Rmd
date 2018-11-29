@@ -15,8 +15,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load packages & data}
 
 library(tidyverse)
+library(reshape2)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
+postdoc_salary <- read_csv("median_salary_copy.csv")
 ```
 
 
@@ -79,29 +81,68 @@ net_females <- f_2015$total - f_1967$total # net increase from 1967-2015
 per_females <- ((f_2015$total - f_1967$total)/f_1967$total) * 100 # % increase from 1967 - 2015
 
 ##############################
-# check data for assumptions of 1-way 2-sample t-test
+# stats? can't use t-test b/c you can't compare just 2 values...not sure yet what to use
 ##############################
+```
 
-males_hist <- ggplot(data = total_males, aes(x = total)) + # males are normally distributed
-  geom_histogram()
-males_qq <- ggplot(data = total_males, aes(sample = total)) + # may be a little concerning...
-  geom_qq()
-var.test(m_1967$total, m_2015$total) # NOT WORKING
-
-females_hist <- ggplot(data = total_females, aes(x = total)) + # not super duper normal looking
-  geom_histogram(binwidth = 75000)
-females_qq <- ggplot(data = total_females, aes(sample = total)) + # generally OK
-  geom_qq()
-var.test(f_1967$total, f_2015$total) # NOT WORKING
-
-##############################
-# conduct 1-way 2-sample t-test for males and females
-##############################
-
-t_males <- t.test(m_2015$total, m_1967$total, alternative = "greater") # SAME ERROR AS VAR.TEST
-f_males <- t.test(f_2015$total, f_1967$total, alternative = "greater") # SAME ERROR AS VAR.TEST
+```{r shifts in female PhD recipients by field (1985, 2000, 2015)}
 
 ```
 
+```{r male & female salaries for starting postdoc and other employment positions (2015)}
 
+##############################
+# make data into long format
+##############################
+
+postdoc_salary_long <- melt(postdoc_salary, variable.name = "employment_status", value.name = "salary") 
+
+##############################
+# add column with "sex"
+##############################
+
+postdoc_salary_new <- postdoc_salary_long %>%
+  mutate(
+    sex = case_when(
+      employment_status == "employment_males" ~ "Male",
+      employment_status == "postdoc_study_males" ~ "Male",
+      employment_status == "employment_females" ~ "Female",
+      employment_status == "postdoc_study_females" ~ "Female"
+    )
+  ) %>% 
+  mutate(
+    status = case_when(
+      employment_status == "employment_males" ~ "Employed",
+      employment_status == "postdoc_study_males" ~ "Postdoc-study",
+      employment_status == "employment_females" ~ "Employed",
+      employment_status == "postdoc_study_females" ~ "Postdoc-study"
+    )
+  )
+
+##############################
+# make status a factor, and list levels in the desired facet order
+##############################
+
+postdoc_salary_new$status<- factor(postdoc_salary_new$status, levels=c("Postdoc-study", "Employed"))
+
+##############################
+# boxplot of employment males vs. females & postdoc males vs. females
+##############################
+
+postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
+  geom_boxplot(aes(group = sex, fill = factor(sex))) +
+  scale_fill_manual(breaks = c("male", "female"), values = c("white", "darkgrey"), name = "Sex") +
+  facet_grid(~ status) +
+  labs(x = "Sex", y = "Salary (USD)") +
+  theme_classic() +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x=element_blank(),
+    panel.border = element_rect(colour = "black", fill=NA, size=0.7))
+
+```
+
+```{r exploring academic salaries for profs in US colleges}
+
+```
 
