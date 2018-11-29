@@ -21,6 +21,7 @@ library(stargazer)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
 postdoc_salary <- read_csv("median_salary_copy.csv")
+fields <- read_csv("phds_by_field_copy.csv")
 fields_85 <- read_csv("phds_field_1985.csv")
 fields_00 <- read_csv("phds_field_2000.csv")
 fields_15 <- read_csv("phds_field_2015.csv")
@@ -92,6 +93,32 @@ per_females <- ((f_2015$total - f_1967$total)/f_1967$total) * 100 # % increase f
 
 ```{r shifts in female PhD recipients by field (1985, 2000, 2015)}
 
+##############################
+# subset out females by field from years 1985, 2000, 2015
+##############################
+
+female_phd <- fields %>% 
+  filter(field == "phys_earth_female" | 
+           field == "math_female" | field == "psy_soc_female" | 
+           field == "engineering_female" | field == "edu_female" | 
+           field == "humanities_arts_female" | field == "other_female") %>% 
+  select(field, `1985_raw`, `2000_raw`, `2015_raw`) %>% 
+  rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`)
+
+##############################
+# convert to long format
+##############################
+
+female_phd_long <- melt(female_phd, variable.name = "year", value.name = "raw")
+
+##############################
+# create stacked barplot
+##############################
+
+female_phd_plot <- ggplot(female_phd_long, aes(x = year, y = raw, fill = field)) + 
+  geom_bar(stat = "identity")
+
+
 ```
 
 
@@ -140,7 +167,7 @@ postdoc_salary_new$status<- factor(postdoc_salary_new$status, levels=c("Postdoc-
 
 postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
   geom_boxplot(aes(group = sex, fill = factor(sex))) +
-  scale_fill_manual(breaks = c("male", "female"), values = c("white", "darkgrey"), name = "Sex") +
+  scale_fill_manual(values = c("white", "darkgrey"), name = "Sex") +
   facet_grid(~ status) +
   labs(x = "Sex", y = "Salary (USD)") +
   theme_classic() +
@@ -186,7 +213,8 @@ employment_summary_stats <- postdoc_salary_new %>%
 postdoc_t <- t.test(male_postdoc$salary, female_postdoc$salary, alternative = "greater") # p = 0.45
 employed_t <- t.test(male_employed$salary, female_employed$salary, alternative = "greater") # p = 0.24
 
-# no significant differences between male and females salaries for postdocs and employed post-grads
+# median salary does not differ significantly between males and females starting postdoc positions 
+# median salary does not differ significantly between male and female PhD recipients in non-postdoc employment positions
 
 ##############################
 # effect size
