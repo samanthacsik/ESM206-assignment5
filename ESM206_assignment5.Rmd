@@ -106,11 +106,4 @@ f_males <- t.test(f_2015$total, f_1967$total, alternative = "greater") # SAME ER
 
 ##### Shifts in female PhD recipients by field (1985, 2000, and 2015). 
 Describe if and how there was a shift in PhDs awarded to females in four fields (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. Describe your results statistically, in a graph or table, and in text. Note: There are several ways that you can interpret this question. You are invited to decide which you think is/are most interesting. Just be really clear about what you are asking/answering in your report.
-```{r shifts in female PhD recipients by field}
-phds_field <- read_csv("phds_field.csv")
-
-phds_1985 <- phds_field %>% 
-  filter(year == "1985")
-```
-
 
