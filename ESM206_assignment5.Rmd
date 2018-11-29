@@ -17,7 +17,6 @@ library(tidyverse)
 library(reshape2)
 library(effsize)
 library(scales)
-library(RColorBrewer)
 library(stargazer)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
@@ -53,9 +52,9 @@ total_females <- enrollment %>%
 ##############################
 
 total_enroll_plot <- ggplot(total_males, aes(x = year, y = total)) +
-  geom_point(color = "gray30") +
+  geom_point(color = "gray30", alpha = 0.5) +
   geom_line(color = "gray30") +
-  geom_point(data = total_females, color = "gray30") +
+  geom_point(data = total_females, color = "gray30", alpha = 0.5) +
   geom_line(data = total_females, color = "gray30", linetype = "dotted") +
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
@@ -127,7 +126,7 @@ tot_2015 <- female_phd_total$total_2015
 ##############################
 
 female_phd_perc <- female_phd %>% 
-  mutate(perc_1985  = (`1985`/tot_1985) * 100, perc_2000 = (`2000`/tot_2000) * 100, perc_2015 = (`2015`/tot_2015) * 100) %>% 
+  mutate(perc_1985  = round((`1985`/tot_1985) * 100, 1), perc_2000 = round((`2000`/tot_2000) * 100, 1), perc_2015 = round((`2015`/tot_2015) * 100, 1)) %>% 
   select(field, perc_1985, perc_2000, perc_2015) %>% 
   mutate(
     field_long = case_when( # do this so legend labels are correct
@@ -142,21 +141,29 @@ female_phd_perc <- female_phd %>%
 # convert to long format
 ##############################
 
-female_phd_long <- melt(female_phd_perc, variable.name = "year", value.name = "percent")
+female_phd_long <- melt(female_phd_perc, variable.name = "year", value.name = "percent") %>% 
+ mutate(
+   year_long = case_when(
+     year == "perc_1985" ~ "1985",
+     year == "perc_2000" ~ "2000",
+     year == "perc_2015" ~ "2015"
+   )
+ ) %>% 
+  select(field_long, year_long, percent)
 
 ##############################
 # create stacked barplot
 ##############################
 
-female_phd_plot <- ggplot(female_phd_long, aes(x = year, y = percent, fill = field_long)) + 
+female_phd_plot <- ggplot(female_phd_long, aes(x = year_long, y = percent, fill = field_long)) + 
   geom_bar(stat = "identity", colour = "black") +
+  geom_text(aes(x = year_long, y = percent, label = paste0(percent,"%")), size = 3,
+            position = position_stack(vjust = 0.5)) +
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
   scale_y_continuous(expand = c(0,0), limits = c(0,110)) +
   labs(x = "Year", y = "Female PhD Recipients by Field (%)") +
   scale_fill_manual(name = "Field of Study", values = c("snow4", "snow", "thistle4", "slategray2"))
-  
-
 ```
 
 
