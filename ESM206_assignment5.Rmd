@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(reshape2)
+library(effsize)
 library(stargazer)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
@@ -26,7 +27,9 @@ fields_15 <- read_csv("phds_field_2015.csv")
 
 ```
 
-
+###To Do:
+1) figure out stats?? OR are absolute differences???
+2) figure caption
 ```{r male vs. female grad enrollment (1967-2015)}
 
 # SOURCE: U.S. Department of Education, National Center for Education Statistics, Higher Education General Information Survey (HEGIS), “Fall Enrollment in Colleges and Universities” surveys, 1967 through 1985; Integrated Postsecondary Education Data System (IPEDS),“Fall Enrollment Survey” (IPEDS-EF:86-99); IPEDS Spring 2001 through Spring 2016, Fall Enrollment component. Accessed at: https:// nces.ed.gov/ programs/digest/ d16/ tables/ dt16_303.80.asp.
@@ -85,15 +88,16 @@ f_2015 <- total_females %>% # subset 2015 females
 net_females <- f_2015$total - f_1967$total # net increase from 1967-2015
 per_females <- ((f_2015$total - f_1967$total)/f_1967$total) * 100 # % increase from 1967 - 2015
 
-##############################
-# stats? can't use t-test b/c you can't compare just 2 values...not sure yet what to use
-##############################
 ```
 
 ```{r shifts in female PhD recipients by field (1985, 2000, 2015)}
 
 ```
 
+
+####To Do:
+1) make figure legend show up
+2) stats (mainly initial exploratory shit that I can't get to work)
 ```{r male & female salaries for starting postdoc and other employment positions (2015)}
 
 ##############################
@@ -145,14 +149,66 @@ postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
     axis.ticks.x=element_blank(),
     panel.border = element_rect(colour = "black", fill=NA, size=0.7))
 
+##############################
+# separately subset males & females by employed & postdoc status
+##############################
+
+male_postdoc <- postdoc_salary_new %>% 
+  filter(sex == "Male", status == "Postdoc-study")
+
+female_postdoc <- postdoc_salary_new %>% 
+  filter(sex == "Female", status == "Postdoc-study")
+
+male_employed <- postdoc_salary_new %>% 
+  filter(sex == "Male", status == "Employed")
+
+female_employed <- postdoc_salary_new %>% 
+  filter(sex == "Female", status == "Employed")
+
+##############################
+# EXPLORATORY PLOTS & ASSUMPTIONS NONE OF THIS IS FUCKING WORKING I FEEL DUMB
+##############################
+
+employment_status_hist <- ggplot(postdoc_salary_new, aes(x = "salary")) + 
+  geom_histogram()
+
+employment_summary_stats <- postdoc_salary_new %>% 
+  group_by(status, sex) %>% 
+  summarize(
+    mean = mean(salary),
+    var = var(salary) # VARIANCE IS WAYY OFF???
+  )
+
+##############################
+# 1-way 2-sample t-tests
+##############################
+
+postdoc_t <- t.test(male_postdoc$salary, female_postdoc$salary, alternative = "greater") # p = 0.45
+employed_t <- t.test(male_employed$salary, female_employed$salary, alternative = "greater") # p = 0.24
+
+# no significant differences between male and females salaries for postdocs and employed post-grads
+
+##############################
+# effect size
+##############################
+
+postdoc_d <- cohen.d(male_postdoc$salary, female_postdoc$salary) # negligible
+abs_postdoc <- median(male_postdoc$salary) - median(female_postdoc$salary) # males > females by $3000
+perc_postdoc <- (median(male_postdoc$salary) - median(female_postdoc$salary))/(median(female_postdoc$salary)) * 100 # male postdoc salary 6.7% higher than females
+
+employed_d <- cohen.d(male_employed$salary, female_employed$salary) # small
+abs_employed <- median(male_employed$salary) - median(female_employed$salary) # males > females by $3417
+perc_employed <- (median(male_employed$salary) - median(female_employed$salary))/(median(female_employed$salary)) * 100  # male employed salary 4.8% higher than females
 ```
 
-<<<<<<< HEAD
+
 ```{r exploring academic salaries for profs in US colleges}
 
 
 ##### Shifts in female PhD recipients by field (1985, 2000, and 2015). 
 #Describe if and how there was a shift in PhDs awarded to females in four fields (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. Describe your results statistically, in a graph or table, and in text. Note: There are several ways that you can interpret this question. You are invited to decide which you think is/are most interesting. Just be really clear about what you are asking/answering in your report.
+
+```
 
 ```{r chi square}
 #### chi square for 1985 ####
