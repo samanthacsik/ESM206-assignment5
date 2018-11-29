@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(reshape2)
 library(effsize)
+library(scales)
 library(stargazer)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
@@ -169,7 +170,8 @@ postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
   geom_boxplot(aes(group = sex, fill = factor(sex))) +
   scale_fill_manual(values = c("white", "darkgrey"), name = "Sex") +
   facet_grid(~ status) +
-  labs(x = "Sex", y = "Salary (USD)") +
+  labs(x = "Sex", y = "Salary") +
+  scale_y_continuous(label = dollar_format()) +
   theme_classic() +
   theme(
     axis.text.x = element_blank(),
