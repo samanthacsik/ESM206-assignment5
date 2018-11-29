@@ -300,20 +300,20 @@ plot(facsal_lm1)
 
 ```
 
-```{r rank, discipline, sex, years_since}
+```{r rank-discipline-sex-years_since}
 facsal_lm2 <- lm(salary ~ rank + discipline + sex + years_since, data = faculty_salary)
 summary(facsal_lm2)
 plot(facsal_lm2)
 ```
 
-```{r rank, discipline, sex, years_service}
+```{r rank-discipline-sex-years_service}
 facsal_lm3 <- lm(salary ~ rank + discipline + sex + years_service, data = faculty_salary)
 summary(facsal_lm3)
 plot(facsal_lm3)
 # doesn't look good
 ```
 
-```{r rank, discipline, sex}
+```{r rank-discipline-sex}
 facsal_lm4 <- lm(salary ~ rank + discipline + sex, data = faculty_salary)
 summary(facsal_lm4)
 # closest adjusted r-squared to model that includes all variables
@@ -321,7 +321,7 @@ plot(facsal_lm4)
 # this is probably the best one
 ```
 
-```{r rank, discipline, years_since}
+```{r rank-discipline-years_since}
 facsal_lm5 <- lm(salary ~ rank + discipline + years_since, data = faculty_salary)
 summary(facsal_lm5)
 ```
