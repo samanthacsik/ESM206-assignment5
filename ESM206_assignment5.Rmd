@@ -31,7 +31,7 @@ phd_fields_field <- read_csv("phds_field_field.csv")
 
 ###To Do:
 1) figure out stats?? OR are absolute differences???
-2) fig caption
+2) why the fuck is female slope < male slope
 3) fit model??
 ```{r male vs. female grad enrollment (1967-2015)}
 
@@ -83,7 +83,7 @@ total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color =
   annotate("text", 
            x = 2010, 
            y = 940000, 
-           label = "y = 9.42e-05x + 1.9e03", 
+           label = "y = 9096x - 1.7e+07", 
            family = "Times New Roman", 
            size = 3) +
   annotate("text", 
@@ -96,7 +96,7 @@ total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color =
   annotate("text", 
            x = 1999, 
            y = 1600000, 
-           label = "y = 3.26e-05x + 1.96e03", 
+           label = "y = 3.01e+04x - 5.9e+07", 
            family = "Times New Roman", 
            size = 3) +
   annotate("text", 
@@ -107,21 +107,22 @@ total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color =
            family = "Times New Roman", 
            size = 3) 
 
-# Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9.42e-05, t(47) = 16.61, *p* <0.001) and females (*b* = 3.26e-05, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9.42e-05(year) + 1.9e03, female enrollment = 3.26e-05(year) + 1.96e03) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1.9,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
+# Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9096, t(47) = 16.61, *p* <0.001) and females (*b* =  3.013e+04, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9096(year) - 1.7e+07, female enrollment =  3.01e+04(year) - 5.9e+07) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
+
 
 ##############################
 # fit a lm to male and female enrollment through time
 ##############################
 
 # lm for males
-enrollment_males_lm <- lm(year ~ total, data = total_males)
+enrollment_males_lm <- lm(total ~ year, data = total_males)
 summary(enrollment_males_lm)
-cor.test(total_males$total, total_males$year) 
+cor.test(total_males$total, total_males$year) # 0.92
 
 # lm for females
-enrollment_females_lm <- lm(year ~ total, data = total_females)
+enrollment_females_lm <- lm(total ~ year, data = total_females)
 summary(enrollment_females_lm)
-cor.test(total_females$total, total_females$year) 
+cor.test(total_females$total, total_females$year) # 0.99
 
 ##############################
 # net & percent increase in total males
@@ -155,11 +156,11 @@ perc_females <- ((f_2015$total - f_1967$total)/f_1967$total) * 100 # % increase 
 # findings
 ##############################
 
-# since 1967, there has been a dramatic rise in female graduate student enrollment in the U.S. as compared to males
-  # male enrollment has nearly doubled (1.9 fold), whereas we observe a 6.5 fold increase in female enrollment
-  # net increase in males was 59,0865; net increase in females was 1,453,562
-
+# CREATE TALE OF MALE & FEMALE RAW VALUES FOR 1967 & 2015 IN WORD
 ```
+
+Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollemnt in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, females enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males (Table 1). 
+
 
 ####To Do:
 1) Stats
