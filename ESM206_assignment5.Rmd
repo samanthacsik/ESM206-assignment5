@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load packages & data}
 
 library(tidyverse)
-library(reshape2)
+library(reshape2) 
 library(effsize)
 library(scales)
 library(extrafont)
