@@ -17,6 +17,7 @@ library(tidyverse)
 library(reshape2)
 library(effsize)
 library(scales)
+library(extrafont)
 library(stargazer)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
@@ -32,6 +33,7 @@ faculty_salary <- read_csv("faculty_salary.csv")
 ###To Do:
 1) figure out stats?? OR are absolute differences???
 2) fig caption
+3) fit model??
 ```{r male vs. female grad enrollment (1967-2015)}
 
 # SOURCE: U.S. Department of Education, National Center for Education Statistics, Higher Education General Information Survey (HEGIS), “Fall Enrollment in Colleges and Universities” surveys, 1967 through 1985; Integrated Postsecondary Education Data System (IPEDS),“Fall Enrollment Survey” (IPEDS-EF:86-99); IPEDS Spring 2001 through Spring 2016, Fall Enrollment component. Accessed at: https:// nces.ed.gov/ programs/digest/ d16/ tables/ dt16_303.80.asp.
@@ -42,27 +44,85 @@ faculty_salary <- read_csv("faculty_salary.csv")
 
 total_males <- enrollment %>% 
   select(year, total_males) %>% 
-  mutate(total = total_males) # add column called "total" that is equal to the "total_males" column so that we can plot males and females on same plot with same y-axis
+  mutate(total = total_males) %>% # add column called "total" that is equal to the "total_males" column so that we can plot males and females on same plot with same y-axis 
+  mutate(sex = rep("male", length(total_males))) %>% 
+  select(year, total, sex)
 
 total_females <- enrollment %>% 
   select(year, total_females) %>% 
-  mutate(total = total_females) # add column called "total" that is equal to the "total_females" column so that we can plot males and females on same plot with same y-axis
+  mutate(total = total_females) %>%  # add column called "total" that is equal to the "total_females" column so that we can plot males and females on same plot with same y-axis
+  mutate(sex = rep("female", length(total_females))) %>% 
+  select(year, total, sex)
+
+total <- rbind(total_males, total_females)
 
 ##############################
 # plot trends through time
 ##############################
 
-total_enroll_plot <- ggplot(total_males, aes(x = year, y = total)) +
-  geom_point(color = "gray30", alpha = 0.5) +
-  geom_line(color = "black") +
-  geom_point(data = total_females, color = "gray30", alpha = 0.5) +
-  geom_line(data = total_females, color = "black", linetype = "dotted") +
+# total_enroll_plot <- ggplot(total_males, aes(x = year, y = total)) +
+#   geom_point(color = "black", alpha = 0.5, size = 1, shape = 15) +
+#   geom_smooth(aes(year, total), method = "lm") +
+#   #geom_line(color = "black") +
+#   geom_point(data = total_females, color = "black", alpha = 0.5, size = 1, shape = 16) +
+#   #geom_line(data = total_females, color = "black", linetype = "dotted") +
+#   geom_smooth(aes(year, total), method = "lm") +
+#   theme_classic() +
+#   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
+#   labs(x = "Year", y = "Total Male & Female Graduate Student \nEnrollment in the U.S.") +
+#   scale_y_continuous(labels = scales::scientific) 
+
+
+total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color = sex)) +
+  geom_point(size = 2, alpha = 0.5) +
+  geom_smooth(method = "lm") +
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
   labs(x = "Year", y = "Total Male & Female Graduate Student \nEnrollment in the U.S.") +
-  scale_y_continuous(labels = scales::scientific)
+  scale_y_continuous(labels = scales::scientific) +
+  scale_color_manual(values = c("grey11", "gray48")) +
+  annotate("text", 
+           x = 2010, 
+           y = 940000, 
+           label = "y = 9.42e-05x + 1.9e03", 
+           family = "Times New Roman", 
+           size = 3) +
+  annotate("text", 
+           x = 2010, 
+           y = 880000, 
+           label = "italic(R)^2 == 0.85", 
+           parse = TRUE, 
+           family = "Times New Roman", 
+           size = 3) +
+  annotate("text", 
+           x = 1999, 
+           y = 1600000, 
+           label = "y = 3.26e-05x + 1.96e03", 
+           family = "Times New Roman", 
+           size = 3) +
+  annotate("text", 
+           x = 1999, 
+           y = 1550000, 
+           label = "italic(R)^2 == 0.98", 
+           parse = TRUE, 
+           family = "Times New Roman", 
+           size = 3) 
 
-# Figure 1. Male and female graduate student enrollment in the U.S. (1967-2015). Total postbaccalaureate fall enrollment at degree-granting postsecondary insitutions includes part- and full-time male (solid line) and female (dotted line) graduate students from both public and private institutions. Data from ___.
+# Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9.42e-05, t(47) = 16.61, *p* <0.001) and females (*b* = 3.26e-05, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9.42e-05(year) + 1.9e03, female enrollment = 3.26e-05(year) + 1.96e03) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1.9,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
+
+##############################
+# fit a lm to male and female enrollment through time
+##############################
+
+# lm for males
+enrollment_males_lm <- lm(year ~ total, data = total_males)
+summary(enrollment_males_lm)
+cor.test(total_males$total, total_males$year) 
+
+# lm for females
+enrollment_females_lm <- lm(year ~ total, data = total_females)
+summary(enrollment_females_lm)
+cor.test(total_females$total, total_females$year) 
 
 ##############################
 # net & percent increase in total males
@@ -239,7 +299,9 @@ postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
     axis.ticks.x=element_blank(),
     panel.border = element_rect(colour = "black", fill=NA, size=0.7))
 
-# Figure 3: Median annual salary (USD) for doctorate recipients with definite postgraduations plans in the U.S., by sex (2015).
+# Figure 3: Median annual salary (USD) for doctorate recipients with definite postgraduations plans in the U.S., by sex (2015). Median salary does not significantly differ between males and females, regardless of postgraduation plans. 
+
+#mann-whitney u?
 
 ##############################
 # separately subset males & females by employed & postdoc status
@@ -353,18 +415,69 @@ results of the model – make sure you describe interesting findings in text). Y
 concerns that you have with the model(s) you present, if any.
 
 ```{r visualize faculty_salary data}
-fac_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = salary)) +
+alltogether_fac_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = salary)) +
+  geom_point(aes(color = sex, pch = rank)) 
+
+fac_by_dept_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = salary)) +
   geom_point(aes(color = sex, pch = rank)) +
   facet_wrap(~ discipline)
+#doesn't quite look linear to me for theoretical disciplines; looks more linear for applied
+```
+
+```{r subset by discipline}
+theoretical <- faculty_salary %>% 
+  filter(discipline == "A")
+
+applied <- faculty_salary %>% 
+  filter(discipline == "B")
+```
+
+```{r models for applied disciplines only}
+# explanatory variables:
+  # rank(associate, assistant, full professor)
+  # years since receiving PhD
+  # years of service
+  # sex 
+
+# full model
+app_lm1 <- lm(salary ~ rank + years_since + years_service + sex, data = applied)
+summary(app_lm1)
+plot(app_lm1)
+
+#lm2 added interaction term (years_since*years_service)
+app_lm2 <- lm(salary ~ rank + years_since + years_service + sex + years_since*years_service, data = applied)
+summary(app_lm2)
+plot(app_lm2)
+
+#lm3 Thought: the longer you've been in service, the higher your rank (rank*years_service)
+app_lm3 <- lm(salary ~ rank + years_service + sex + rank*years_service, data = applied)
+summary(app_lm3)
+plot(app_lm3)
+
+#lm4 Thought: more men that have been in service longer (sex*years_service)
+app_lm4 <- lm(salary ~ rank + years_service + sex + sex*years_service, data = applied)
+summary(app_lm4)
+plot(app_lm4)
+
+#lm5 Thought: men rank higher than women (sex*rank)
+app_lm5 <- lm(salary ~ rank + years_service + sex + sex*rank, data = applied)
+summary(app_lm5)
+plot(app_lm5)
 ```
 
 
-```{r all variables}
+```{r models for both disciplines (A,B); all variables}
+# explanatory variables:
+  # rank(associate, assistant, full professor)
+  # years since receiving PhD
+  # years of service
+  # sex 
+  # discipline (theoretical, applied)
+
 #### all variables ####
 facsal_lm1 <- lm(salary ~ rank + discipline + years_since + years_service + sex, data = faculty_salary)
 summary(facsal_lm1)
 plot(facsal_lm1)
-
 ```
 
 ```{r rank-discipline-sex-years_since}
