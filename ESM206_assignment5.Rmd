@@ -18,14 +18,13 @@ library(reshape2)
 library(effsize)
 library(scales)
 library(stargazer)
+library(beyonce)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
 postdoc_salary <- read_csv("median_salary_copy.csv")
 fields <- read_csv("phds_by_field_copy.csv")
-fields_85 <- read_csv("phds_field_1985.csv")
-fields_00 <- read_csv("phds_field_2000.csv")
-fields_15 <- read_csv("phds_field_2015.csv")
 faculty_salary <- read_csv("faculty_salary.csv")
+phd_fields_field <- read_csv("phds_field_field.csv")
 
 ```
 
@@ -305,43 +304,149 @@ perc_employed <- (median(male_employed$salary) - median(female_employed$salary))
 
 ```{r chi square}
 #### chi square for 1985 ####
-fields_85_simpl <- fields_85 %>% 
-  select(-sex)
+fields_85 <- phd_fields_field %>%
+  filter(year == "1985",
+         field == "lifesci" |
+           field == "physsci" |
+           field == "math" |
+           field == "psych" |
+           field == "eng" |
+           field == "edu" |
+           field == "arts" |
+           field == "other") %>% 
+  select("male", "female")
 
-rownames(fields_85_simpl) <- c("male", "female")
+rownames(fields_85) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
 
-fields_85_prop <- prop.table(as.matrix(fields_85_simpl), 1)
+fields_85_prop <- phd_fields_field %>%
+  filter(year == "1985",
+         field == "lifesci" |
+           field == "physsci" |
+           field == "math" |
+           field == "psych" |
+           field == "eng" |
+           field == "edu" |
+           field == "arts" |
+           field == "other") %>% 
+  select("male_prop", "female_prop")
 
-fields85_chi <- chisq.test(fields_85_simpl)
+rownames(fields_85_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
+
+fields85_chi <- chisq.test(fields_85)
 fields85_chi
 # proportions are different, no shit
 
 #### chi square for 2000 ####
 
-fields_00_simpl <- fields_00 %>% 
-  select(-sex)
+fields_00 <- phd_fields_field %>%
+  filter(year == "2000",
+         field == "lifesci" |
+           field == "physsci" |
+           field == "math" |
+           field == "psych" |
+           field == "eng" |
+           field == "edu" |
+           field == "arts" |
+           field == "other") %>% 
+  select("male", "female")
 
-rownames(fields_00_simpl) <- c("male", "female")
+rownames(fields_00) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
 
-fields_00_prop <- prop.table(as.matrix(fields_00_simpl), 1)
+fields_00_prop <- phd_fields_field %>%
+  filter(year == "2000",
+         field == "lifesci" |
+           field == "physsci" |
+           field == "math" |
+           field == "psych" |
+           field == "eng" |
+           field == "edu" |
+           field == "arts" |
+           field == "other") %>% 
+  select("male_prop", "female_prop")
 
-fields00_chi <- chisq.test(fields_00_simpl)
+rownames(fields_00_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
+
+fields00_chi <- chisq.test(fields_00)
 fields00_chi
 # proportions are different
 
 #### chi square for 2015 ####
 
-fields_15_simpl <- fields_15 %>% 
-  select(-sex)
+fields_15 <- phd_fields_field %>%
+  filter(year == "2015",
+         field == "lifesci" |
+           field == "physsci" |
+           field == "math" |
+           field == "psych" |
+           field == "eng" |
+           field == "edu" |
+           field == "arts" |
+           field == "other") %>% 
+  select("male", "female")
 
-rownames(fields_15_simpl) <- c("male", "female")
+rownames(fields_15) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
 
-fields_15_prop <- prop.table(as.matrix(fields_15_simpl), 1)
+fields_15_prop <- phd_fields_field %>%
+  filter(year == "2015",
+         field == "lifesci" |
+           field == "physsci" |
+           field == "math" |
+           field == "psych" |
+           field == "eng" |
+           field == "edu" |
+           field == "arts" |
+           field == "other") %>% 
+  select("male_prop", "female_prop")
 
-fields15_chi <- chisq.test(fields_15_simpl)
+rownames(fields_15_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
+
+fields15_chi <- chisq.test(fields_15)
 fields15_chi
 # proportions are different
 
+```
+
+```{r specialty line graph}
+line_df <- phd_fields_field %>% 
+  filter(year == "1985" |
+           year == "2000" |
+           year == "2015") %>%
+  filter(field == "physsci" |
+           field == "eng" |
+           field == "edu" |
+           field == "arts") %>% 
+  select("field", "year", "female_prop")
+
+physsci <- phd_fields_field %>% 
+  filter(field == "physsci") %>% 
+  select("year", "female_prop")
+
+eng <- phd_fields_field %>% 
+  filter(field == "eng") %>% 
+  select("year", "female_prop")
+
+edu <- phd_fields_field %>% 
+  filter(field == "edu") %>% 
+  select("year", "female_prop")
+
+arts <- phd_fields_field %>% 
+  filter(field == "arts") %>% 
+  select("year", "female_prop")
+
+line_x = "Year"
+line_y = "Proportion of female students in total population"
+
+fields_line <- ggplot(line_df, aes(x = year, y = female_prop, group = field, color = field)) +
+  geom_line() +
+  geom_point(size = 3) +
+  scale_x_continuous(breaks = c(1985, 2000, 2015), labels = c("1985", "2000", "2015")) +
+  scale_color_manual(values = beyonce_palette(18)) +
+  expand_limits(y = 1) +
+  theme_bw() +
+  theme(panel.grid.minor = element_line(linetype = "blank")) +
+  labs(x = line_x, y = line_y)
+  
+fields_line
 ```
 
 ##### Model describing faculty salary
