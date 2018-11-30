@@ -570,7 +570,6 @@ summary(app_lm5)
 plot(app_lm5)
 ```
 
-
 ```{r models for both disciplines (A,B); all variables}
 # explanatory variables:
   # rank(associate, assistant, full professor)
@@ -579,50 +578,40 @@ plot(app_lm5)
   # sex 
   # discipline (theoretical, applied)
 
-<<<<<<< HEAD
 #### all variables ####
-=======
-```{r all variables}
->>>>>>> b57920201dd0e524aca66687b1f3c03fdca9bc0d
 facsal_lm1 <- lm(salary ~ rank + discipline + years_since + years_service + sex, data = faculty_salary)
 summary(facsal_lm1)
 plot(facsal_lm1)
-```
 
-```{r rank-discipline-sex-years_since}
+#### rank, discipline, sex, years_since ####
 facsal_lm2 <- lm(salary ~ rank + discipline + sex + years_since, data = faculty_salary)
 summary(facsal_lm2)
 plot(facsal_lm2)
-```
 
-```{r rank-discipline-sex-years_service}
+#### rank, discipline, sex, years_service ####
 facsal_lm3 <- lm(salary ~ rank + discipline + sex + years_service, data = faculty_salary)
 summary(facsal_lm3)
 plot(facsal_lm3)
 # doesn't look good
-```
 
-```{r rank-discipline-sex}
+#### rank, discipline, sex ####
 facsal_lm4 <- lm(salary ~ rank + discipline + sex, data = faculty_salary)
 summary(facsal_lm4)
 # closest adjusted r-squared to model that includes all variables
 plot(facsal_lm4)
-# this is probably the best one
-```
 
-```{r rank-discipline-years_since}
+#### rank, discipline, years_since ####
 facsal_lm5 <- lm(salary ~ rank + discipline + years_since, data = faculty_salary)
 summary(facsal_lm5)
-```
 
-```{r}
+#### discipline, sex, rank, years_service, rank*years_service ####
 facsal_lm6 <- lm(salary ~ discipline + sex + rank + years_service + rank*years_service, data = faculty_salary)
 summary(facsal_lm6)
 plot(facsal_lm6)
 ```
 
-
 ```{r AIC values}
+#### all disciplines ####
 AIC_lm1 <- AIC(facsal_lm1)
 AIC_lm1
 # 9093.826
@@ -642,6 +631,34 @@ AIC_lm4
 AIC_lm5 <- AIC(facsal_lm5)
 AIC_lm5
 # 9096.497
+
+AIC_lm6 <- AIC(facsal_lm6)
+AIC_lm6
+# 9099.768
+
+#### applied only ####
+
+AIC_app_lm1 <- AIC(app_lm1)
+AIC_app_lm1
+# 4924.781
+
+AIC_app_lm2 <- AIC(app_lm2)
+AIC_app_lm2
+# 4926.024
+
+AIC_app_lm3 <- AIC(app_lm3)
+AIC_app_lm3
+# 4925.24
+
+AIC_app_lm4 <- AIC(app_lm4)
+AIC_app_lm4
+# 4925.014
+
+AIC_app_lm5 <- AIC(app_lm5)
+AIC_app_lm5
+# 4927.247
+
+
 ```
 
 ###References:
