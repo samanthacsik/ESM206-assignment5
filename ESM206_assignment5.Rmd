@@ -465,11 +465,9 @@ fac_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = salary)) +
 
 
 ```{r all variables}
-#### all variables ####
 facsal_lm1 <- lm(salary ~ rank + discipline + years_since + years_service + sex, data = faculty_salary)
 summary(facsal_lm1)
 plot(facsal_lm1)
-
 ```
 
 ```{r rank-discipline-sex-years_since}
