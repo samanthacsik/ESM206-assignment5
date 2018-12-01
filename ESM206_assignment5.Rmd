@@ -160,11 +160,7 @@ Things to research for discussion:
 -social changes -- women away from being stay-at-home moms/housekeepers and towards being higher degree earners in the workforce
 -why have then increased faster than males??
 
-
-####To Do:
-1) Stats
-2) fig caption
-```{r shifts in female PhD recipients by field (1985, 2000, 2015)}
+```{r shifts in female PhD recipients by field (1985, 2000, 2015)--Sam's plot and chi square}
 
 #SOURCE: National Science Foundation, National Center for Science and Engineering Statistics, Survey of Earned Doctorates. You can find more information here: https:// www.nsf.gov/ statistics/ srvydoctorates/ .
 
@@ -173,8 +169,10 @@ Things to research for discussion:
 ##############################
 
 female_phd <- fields %>% 
-  filter(field == "phys_earth_female" | field == "engineering_female" | 
-           field == "edu_female" | field == "humanities_arts_female") %>% 
+  filter(field == "phys_earth_female" | 
+           field == "engineering_female" | 
+           field == "edu_female" | 
+           field == "humanities_arts_female") %>% 
   select(field, `1985_raw`, `2000_raw`, `2015_raw`) %>% 
   rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`) 
 
@@ -235,12 +233,56 @@ female_phd_plot <- ggplot(female_phd_long, aes(x = year_long, y = percent, fill 
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
   scale_y_continuous(expand = c(0,0), limits = c(0,110)) +
   labs(x = "Year", y = "Female PhD Recipients by Field (%)") +
-  scale_fill_manual(name = "Field of Study", values = c("snow4", "snow", "thistle4", "slategray2"))
+  scale_fill_manual(name = "Field of Study", values = c("snow4", "mediumaquamarine", "thistle4", "slategray2"))
+
+female_phd_plot
 
 # Figure 2: Percentage of female PhD recipients by field from 1985, 2000, & 2015. Percentages of female PhD recipients from 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) were assessed across 4 focal fields of study: Education, Engineering, Humanities & Arts, Physical & Earth Sciences. Fields assessed include education, Other academic fields have not been considered for this plot.... THIS STILL ISN'T RIGHT...
+
+##############################
+# wrangle data into format for eventual presentation
+##############################
+
+female_phd_chi2_present <- fields %>% 
+  filter(field == "phys_earth_female" | # filter for desired fields of study
+           field == "engineering_female" | 
+           field == "edu_female" | 
+           field == "humanities_arts_female") %>% 
+  select(field, `1985_raw`, `2000_raw`, `2015_raw`) %>%  # select raw data from years of interest
+  rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`) %>% # rename year variables 
+  mutate(perc_1985  = round((`1985`/tot_1985) * 100, 1), perc_2000 = round((`2000`/tot_2000) * 100, 1), perc_2015 = round((`2015`/tot_2015) * 100, 1)) %>% # calculate percentage of females within each of the four fields
+  select(field, `1985`, perc_1985, `2000`, perc_2000, `2015`, perc_2015)
+
+# Table 2: Fields in which females received PhDs, by year. Values indicated are counts, with proportions (by field of study) in italics. Data source: ___.
+
+##############################
+# wrangle data into format for chi2 test
+##############################
+
+female_phd2 <- fields %>% 
+  filter(field == "edu_female" | 
+        field == "engineering_female" |
+        field == "humanities_arts_female" |
+        field == "phys_earth_female") %>% 
+  select(`1985_raw`, `2000_raw`, `2015_raw`) %>% 
+  rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`) 
+
+rownames(female_phd2) <- c("Physical & Earth Sciences", "Engineering", "Education", "Humanities & Arts")
+
+##############################
+# chi2 test (use female_phd df from earlier section to run test)
+##############################
+
+# QUESTION: Is there a significant effect of year on the proportion of year on PhD type awarded to female graduate students?
+
+
+x2_test <- chisq.test(female_phd2)
+
+# FINDING: Field of study differs significantly for female PhD recipients in the years 1985, 2000, and 2015.
 ```
 
-```{r chi square}
+```{r An's chi square}
+
 #### chi square for 1985 ####
 fields_85 <- phd_fields_field %>%
   filter(year == "1985",
@@ -251,7 +293,7 @@ fields_85 <- phd_fields_field %>%
            field == "eng" |
            field == "edu" |
            field == "arts" |
-           field == "other") %>% 
+           field == "other") %>%
   select("male", "female")
 
 rownames(fields_85) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
@@ -265,7 +307,7 @@ fields_85_prop <- phd_fields_field %>%
            field == "eng" |
            field == "edu" |
            field == "arts" |
-           field == "other") %>% 
+           field == "other") %>%
   select("male_prop", "female_prop")
 
 rownames(fields_85_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
@@ -285,7 +327,7 @@ fields_00 <- phd_fields_field %>%
            field == "eng" |
            field == "edu" |
            field == "arts" |
-           field == "other") %>% 
+           field == "other") %>%
   select("male", "female")
 
 rownames(fields_00) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
@@ -299,7 +341,7 @@ fields_00_prop <- phd_fields_field %>%
            field == "eng" |
            field == "edu" |
            field == "arts" |
-           field == "other") %>% 
+           field == "other") %>%
   select("male_prop", "female_prop")
 
 rownames(fields_00_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
@@ -319,7 +361,7 @@ fields_15 <- phd_fields_field %>%
            field == "eng" |
            field == "edu" |
            field == "arts" |
-           field == "other") %>% 
+           field == "other") %>%
   select("male", "female")
 
 rownames(fields_15) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
@@ -333,18 +375,19 @@ fields_15_prop <- phd_fields_field %>%
            field == "eng" |
            field == "edu" |
            field == "arts" |
-           field == "other") %>% 
+           field == "other") %>%
   select("male_prop", "female_prop")
 
 rownames(fields_15_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
 
 fields15_chi <- chisq.test(fields_15)
 fields15_chi
-# proportions are different
+#proportions are different
 
 ```
 
-```{r specialty line graph}
+```{r specialty line graph} 
+
 line_df <- phd_fields_field %>% 
   filter(year == "1985" |
            year == "2000" |
@@ -444,7 +487,9 @@ postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
     axis.ticks.x=element_blank(),
     panel.border = element_rect(colour = "black", fill=NA, size=0.7))
 
-# Figure 3: Median annual salary (USD) for doctorate recipients with definite postgraduations plans in the U.S., by sex (2015). Median salary does not significantly differ between males and females, regardless of postgraduation plans. 
+postdoc_salary_plot
+
+# Figure 3: Median annual salary (USD) for doctorate recipients with definite postgraduations plans in the U.S., by sex (2015). Median salary does not significantly differ between males and females, regardless of postgraduation plans. Data source: ____.
 
 #mann-whitney u?
 
@@ -465,28 +510,20 @@ female_employed <- postdoc_salary_new %>%
   filter(sex == "Female", status == "Employed")
 
 ##############################
-# EXPLORATORY PLOTS & ASSUMPTIONS NONE OF THIS IS FUCKING WORKING I FEEL DUMB
+# data is not continuous (pre-calculated median salaries by sex and field), so instead run a parametric test comparing salaries between males and females for postdoc and employment positions
+  # Advantages of non-parametric tests:
+    # no assumption of normality or equal variance
+    # compares medians (which is actually a better parameter for income comparisons)
+# Use a Mann-Whitney U test (non-parametric alternative for unparied t-test)
+  # H0: ranks are equal
+  # Ha: ranks are unequal
 ##############################
 
-employment_status_hist <- ggplot(postdoc_salary_new, aes(x = "salary")) + 
-  geom_histogram()
+postdoc_u <- wilcox.test(male_postdoc$salary, female_postdoc$salary) # p = 0.87
+# Median salary does not significantly differ between males and females starting postdoc positions in 2015.
 
-employment_summary_stats <- postdoc_salary_new %>% 
-  group_by(status, sex) %>% 
-  summarize(
-    mean = mean(salary),
-    var = var(salary) # VARIANCE IS WAYY OFF???
-  )
-
-##############################
-# 1-way 2-sample t-tests
-##############################
-
-postdoc_t <- t.test(male_postdoc$salary, female_postdoc$salary, alternative = "greater") # p = 0.45
-employed_t <- t.test(male_employed$salary, female_employed$salary, alternative = "greater") # p = 0.24
-
-# median salary does not differ significantly between males and females starting postdoc positions 
-# median salary does not differ significantly between male and female PhD recipients in non-postdoc employment positions
+employed_u <- wilcox.test(male_employed$salary, female_employed$salary) # p = 0.33
+# Median salary does not significantly differ between males and females PhD recipients in non-postdoc employment positions.
 
 ##############################
 # effect size
@@ -501,6 +538,9 @@ abs_employed <- median(male_employed$salary) - median(female_employed$salary) # 
 perc_employed <- (median(male_employed$salary) - median(female_employed$salary))/(median(female_employed$salary)) * 100  # male employed salary 4.8% higher than females
 ```
 
+Discussion Points:
+- despite non-significant differences, males still make more money than females in both groups
+- discuss wage gap
 
 ```{r exploring academic salaries for profs in US colleges}
 
