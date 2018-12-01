@@ -692,6 +692,32 @@ summary(facsal_lm5)
 facsal_lm6 <- lm(salary ~ discipline + sex + rank + years_service + rank*years_service, data = faculty_salary)
 summary(facsal_lm6)
 plot(facsal_lm6)
+
+#### discipline, rank, sex, rank*sex ####
+facsal_lm7 <- lm(salary ~ discipline + rank + sex + rank*sex, data = faculty_salary)
+summary(facsal_lm7)
+plot(facsal_lm7)
+
+#### discipline, rank*sex ####
+facsal_lm8 <- lm(salary ~ discipline + rank*sex, data = faculty_salary)
+summary(facsal_lm8)
+plot(facsal_lm8)
+
+#### rank, sex, discipline, discipline*sex ####
+facsal_lm9 <- lm(salary ~ rank + sex + discipline + discipline*sex, data = faculty_salary)
+summary(facsal_lm9)
+plot(facsal_lm9)
+# lowest AIC value but doesn't make sense because a Male in an Applied discipline makes less
+
+#### rank, sex, discipline, sex*rank ####
+facsal_lm10 <- lm(salary ~ rank + sex + discipline + sex*rank, data = faculty_salary)
+summary(facsal_lm10)
+plot(facsal_lm10)
+
+#### rank, sex, discipline, rank*discipline ####
+facsal_lm11 <- lm(salary ~ rank + sex + discipline + rank*discipline, data = faculty_salary)
+summary(facsal_lm11)
+plot(facsal_lm11)
 ```
 
 ```{r AIC values}
@@ -719,6 +745,26 @@ AIC_lm5
 AIC_lm6 <- AIC(facsal_lm6)
 AIC_lm6
 # 9099.768
+
+AIC_lm7 <- AIC(facsal_lm7)
+AIC_lm7
+# 9098.989
+
+AIC_lm8 <- AIC(facsal_lm8)
+AIC_lm8
+# 9098.989
+
+AIC_lm9 <- AIC(facsal_lm9)
+AIC_lm9
+# 9096.663
+
+AIC_lm10 <- AIC(facsal_lm10)
+AIC_lm10
+# 9098.989
+
+AIC_lm11 <- AIC(facsal_lm11)
+AIC_lm11
+# 9098.414
 
 #### applied only ####
 
