@@ -430,6 +430,51 @@ fields_line <- ggplot(line_df, aes(x = year, y = female_prop, group = field, col
 fields_line
 ```
 
+```{r chi square again}
+#### physsci ####
+physsci_x2df <- phd_fields_field %>% 
+  filter(field == "physsci") %>% 
+  select("male", "female")
+
+rownames(physsci_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
+
+physsci_x2 <- chisq.test(physsci_x2df)
+physsci_x2
+
+#### eng ####
+eng_x2df <- phd_fields_field %>% 
+  filter(field == "eng") %>% 
+  select("male", "female")
+
+rownames(eng_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
+
+eng_x2 <- chisq.test(eng_x2df)
+eng_x2
+
+#### edu ####
+edu_x2df <- phd_fields_field %>% 
+  filter(field == "edu") %>% 
+  select("male", "female")
+
+rownames(edu_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
+
+edu_x2 <- chisq.test(edu_x2df)
+edu_x2
+
+#### arts ####
+arts_x2df <- phd_fields_field %>% 
+  filter(field == "arts") %>% 
+  select("male", "female")
+
+rownames(arts_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
+
+arts_x2 <- chisq.test(arts_x2df)
+arts_x2
+
+```
+Comparing total PhD students, there is a significant effect of year on proportion of female students in the physical sciences, (_X_^2^(`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001), engineering (_X_^2^(`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001), education (_X_^2^(`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001), and the humanities and arts (_X_^2^(`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001). 
+Between 1985 and 2015, female PhD students have shown a growing interest in the physical sciences and engineering, as the percent of female students specializing in the physical sciences has increased 8.6% from 10.1% to 18.7% (cite stacked bar graph) and the percent of female students specializing in engineering has increased 18.2% from 3.5% to 21.7%. This is reflected in the growing proportion of female students in the total number of students in the physical sciences has doubled between 1985 (0.16) and 2015 (0.34) and quadrupled between 1985 (0.06) and 2015 (0.23) in engineering.
+
 ####To Do:
 1) stats (mainly initial exploratory shit that I can't get to work)
 2) fig caption
