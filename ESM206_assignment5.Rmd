@@ -620,21 +620,23 @@ years_plot <- ggplot(faculty_salary, aes(x = years_since, y = years_service)) +
 
 ```
 
-```{r models for both disciplines (A,B); all variables}
+```{r multivariate linear regression for faculty salary}
 
 # run full model then find VIF to look for colinearity
 full_lm1 <- lm(salary ~ rank + discipline + years_since + years_service + sex, data = faculty_salary)
 summary(full_lm1) # R2 = 0.44, p < 0.002
 plot(full_lm1)
 vif(full_lm1)
-# FINDINGS: years_since & years_service both have VIF > 4 (some correlation, think critically about possible overlaps); this in combination with "years_plot" make me think that we should drop one of these predictor variables--I'm inclined to keep years_service because I think it makes more sense that the longer you've been faculty, the higher your rank (see fac_by_dept_plot) which typically means the higher your salary; 
+# FINDINGS: years_since & years_service both have VIF > 4 (some correlation, think critically about possible overlaps); this in combination with "years_plot" make me think that we should drop one of these predictor variables--I'm inclined to keep years_service because I think it makes more sense that the longer that you've been faculty, the higher your rank (see fac_by_dept_plot)--which typically means the higher your salary
 
-# lm 2 includes rank, discipline, sex, years_since (eliminate correlated predictor var: years_since)
+# lm 2 includes rank, discipline, sex, years_serive (eliminated years_since becuase it appeared correlated with years_service)
 facsal_lm2 <- lm(salary ~ rank + discipline + years_service + sex, data = faculty_salary)
-summary(facsal_lm2) # R2 = 0.44, p < 0.001
+summary(facsal_lm2) # R2 = 0.44, p < 0.001 # reference = female, A, Associate Prof
 plot(facsal_lm2)
 vif(facsal_lm2) # no correlataion between variables GOOD!
 # FINDINGS: not necessarily non-linear (residuals vs fitted); appears to be heteroscedastic (Scale-Location plot)
+
+
 
 #### rank, discipline, sex, years_service ####
 # facsal_lm3 <- lm(salary ~ rank + discipline + sex + years_service, data = faculty_salary)
@@ -686,13 +688,13 @@ vif(facsal_lm2) # no correlataion between variables GOOD!
 
 ```{r AIC values}
 #### all disciplines ####
-AIC_lm1 <- AIC(facsal_lm1)
-AIC_lm1
+AIC_full_lm1 <- AIC(full_lm1)
+AIC_full_lm1
 # 9093.826
 
 AIC_lm2 <- AIC(facsal_lm2)
 AIC_lm2
-# 9097.22
+# 9096.813
 
 # AIC_lm3 <- AIC(facsal_lm3)
 # AIC_lm3
