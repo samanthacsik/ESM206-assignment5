@@ -1,0 +1,35 @@
+---
+title: "Trends in Graduate Enrollment, Shifting Fields of Study, and Faculty Salary"
+author: "Sam Csik, An Bui"
+date: "5 December 2018"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##### Introduction:  
+-	Women have improved access to post-baccalaureate education  
+-	However, there is much gender disparity in discipline-specific involvement and salaries  
+-	In the US specifically, faculty salary has increased but female faculty consistently earn less than male faculty (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp) 
+
+##### Objectives:  
+-	Assess trends in gender distribution in doctoral students in the US from 1985-2015  
+-	Assess shifts in female enrollment in doctoral programs in Physical Sciences, Engineering, Education, and the Humanities and Arts in two ways:  
+    - How female graduate student research interests have shifted between these four fields, and  
+    - How the proportion of female graduate students in these fields have changed  
+-	Compare male and female salaries after receiving a PhD  
+-	Construct a model describing faculty salaries  
+
+##### Conclusion:
+-	Female involvement in higher education has improved, but there are still steps to be made for progress  
+    - While the proportion of female doctoral recipients has increased, only 29% of researchers worldwide are women (cite UNESCO, https://www.tellmaps.com/uis/gender/?lang=en#!/tellmap/79054752)
+    - Female candidates for jobs are assessed based on whether or not they have children, regardless of the legality of this assessment  
+-  While the data we have are as much as we can gather, there are missing components that would be useful for parameterizing a model describing faculty salaries
+    - Institution type: research institutions vs liberal arts colleges  
+    - Race: women make less than men, but Black women, Asian women, and Hispanic women make less than white women (there are numbers, will find later)  
+-	Race is a particularly egregious variable to be left out, especially since it stratifies so much of higher education  
+    - 64% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp)  
+    -	66% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp)  
+    -	82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61)  
