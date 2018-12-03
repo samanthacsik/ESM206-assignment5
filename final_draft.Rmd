@@ -14,13 +14,22 @@ knitr::opts_chunk$set(echo = TRUE)
 -	However, there is much gender disparity in discipline-specific involvement and salaries  
 -	In the US specifically, faculty salary has increased but female faculty consistently earn less than male faculty (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp) 
 
-##### Objectives:  
--	Assess trends in gender distribution in doctoral students in the US from 1985-2015  
--	Assess shifts in female enrollment in doctoral programs in Physical Sciences, Engineering, Education, and the Humanities and Arts in two ways:  
+##### Objectives (we should put this in intro this time):  
+  The following report uses publicly available demographic data to evaluate changes in the types of advanced academic degrees sought and by whom, as well as salaries of doctorate degree earners at different stages (something here about academia vs non-academia) of their careers. We use these data to assess: 
+-	trends in the gender distribution of doctoral students in the US from 1985-2015,   
+-	shifts in female enrollment in doctoral programs in the Physical Sciences, Engineering, Education, and the Humanities and Arts in two ways:  
     - How female graduate student research interests have shifted between these four fields, and  
     - How the proportion of female graduate students in these fields have changed  
--	Compare male and female salaries after receiving a PhD  
--	Construct a model describing faculty salaries  
+-	differences in salaries, by sex, after receiving a PhD 
+-	variables that may predict faculty salaries.
+
+####Methods & Objectives:
+
+SOME SHORT BLURB HERE ABOUT GRAD SCHOOL & ACADEMIA
+
+*Data & Analysis*
+
+  ...using data provided by the National Center for Education Statistics (NCES).
 
 ##### Conclusion:
 -	Female involvement in higher education has improved, but there are still steps to be made for progress  
