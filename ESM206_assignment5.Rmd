@@ -608,7 +608,8 @@ fac_by_dept_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = sal
   facet_wrap(~ discipline)
 
 fac_by_dept_plot
-# too much variability to determine a stat. sig effect
+# too much variability to determine a stat. sig effect between sexes? see models below
+
 ##############################
 # Explore relationships between variables that could be correlated
 ##############################
