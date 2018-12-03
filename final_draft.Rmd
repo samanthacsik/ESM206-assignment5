@@ -30,6 +30,29 @@ knitr::opts_chunk$set(echo = TRUE)
  
 **Analysis & Disucssion**
 
+*Male and female graduate student enrollment in the U.S. (1967-2015)*
+
+  Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollemnt in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, females enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
+  
+*Shifts in female PhD recipients by field (1985, 2000, 2015)*
+
+Comparing total PhD students, there is a significant effect of year on proportion of female students in the physical sciences, (_X_^2^(`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001), engineering (_X_^2^(`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001), education (_X_^2^(`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001), and the humanities and arts (_X_^2^(`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001). 
+
+  Further, we found that not only have the proportions of women PhD students (as compared to men) within these focal fields shifted thorugh time, but that the proportion of women completing their degrees within these fields 
+ 
+  ~composition of female phd recipients has changed dramatically thorugh time...~
+  
+  To determine if the research interests of female PhD students have shifted thorugh time, we assessed PhDs awarded to women across four focal fields of study: education, engineering, humanities & arts, and physical & earth sciences in 1985, 2000, and 2015. We found that field of study differs significantly for female PhD recipients in the years 1985, 2000, 2015 ($\chi^2$(`r female_phd2$parameter`) = `r female_phd2$statistic`, *p* < 0.001). Women were dispropotionately specializing in 
+
+Between 1985 and 2015, female PhD students have shown a growing interest in the physical sciences and engineering, as the percent of female students specializing in the physical sciences has increased 8.6% from 10.1% to 18.7% (cite stacked bar graph) and the percent of female students specializing in engineering has increased 18.2% since 1985. This is reflected in the growing proportion of female students in the total number of students in the physical sciences has doubled between 1985 (0.16) and 2015 (0.34) and quadrupled between 1985 (0.06) and 2015 (0.23) in engineering.
+
+
+
+
+*Salary differences between male and female PhD recipients*
+
+*Modeling faculty salary*
+
 **Conclusion:**
 -	Female involvement in higher education has improved, but there are still steps to be made for progress  
     - While the proportion of female doctoral recipients has increased, only 29% of researchers worldwide are women (cite UNESCO, https://www.tellmaps.com/uis/gender/?lang=en#!/tellmap/79054752)
