@@ -194,6 +194,6 @@ female_phd_plot
     - Institution type: research institutions vs liberal arts colleges  
     - Race: women make less than men, but Black women, Asian women, and Hispanic women make less than white women (there are numbers, will find later)  
 -	Race is a particularly egregious variable to be left out, especially since it stratifies so much of higher education  
-    - 64% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp)  
-    -	66% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp)  
+    - 65% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp)  
+    -	69% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp)  
     -	82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61)  
