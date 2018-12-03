@@ -25,7 +25,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Data & Methods:**
   All data were analyzed using R version 3.5.1. We first investigated changes in graduate student enrollment in the United States using data provided by the National Center for Education Statistics (NCES) (cite). We modeled the relationship between year and male and female graduate student enrollment between 1967 and 2015 by fitting linear equations to data on each sex and comparing the rate of change between the two groups.
-  Using data provided by the National Scienc Foundatio's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
+  Using data provided by the National Science Foundation's (NSF) Survey of Earned Doctorates (SED) (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. 
+  To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05). Data was again provided by NSF's SED.
   We lastly constructed a multivariate linear model to describe faculty salary based on X, Y, Z. We later suggest additional parameters that we believe may help to better inform our model.
  
 **Analysis & Discussion**
@@ -45,7 +46,6 @@ postdoc_salary <- read_csv("median_salary_copy.csv")
 fields <- read_csv("phds_by_field_copy.csv")
 faculty_salary <- read_csv("faculty_salary.csv")
 phd_fields_field <- read_csv("phds_field_field.csv")
-
 ```
 
 ##### Trends in gender distribution of doctoral students
@@ -104,14 +104,14 @@ total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color =
 total_enroll_plot
 # Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9096, t(47) = 16.61, *p* <0.001) and females (*b* =  3.013e+04, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9096(year) - 1.7e+07, female enrollment =  3.01e+04(year) - 5.9e+07) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
 ```
-Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollment in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, female enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
+ *Male and female graduate student enrollment in the U.S. (1967-2015)*
+  Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollemnt in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, females enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
 
 Things to research for discussion:
 -social changes -- women away from being stay-at-home moms/housekeepers and towards being higher degree earners in the workforce
 -why have then increased faster than males??
 
 ##### Female graduate enrollment in Physical Sciences, Engineering, Education, and the Humanities and Arts
-
 ```{r stacked bar chart}
 #### subset out females by field from years 1985, 2000, 2015 ####
 female_phd <- fields %>% 
@@ -172,16 +172,14 @@ female_phd_plot <- ggplot(female_phd_long, aes(x = year_long, y = percent, fill 
 
 female_phd_plot
 ```
-Between 1985 and 2015, female interests in the four focal fields (Physical Sciences, Engineering, Education, and the Humanities and Arts) have shifted. Between 1985 and 2015, the proportion of female students specializing in education decreased by nearly half but the proportion of female students in engineering has increased seven-fold (Fig. 1).  
-- says something about increased access of women to engineering
-
-*Male and female graduate student enrollment in the U.S. (1967-2015)*
-  Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollemnt in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, females enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
+  Between 1985 and 2015, female interests in the four focal fields (Physical Sciences, Engineering, Education, and the Humanities and Arts) have shifted. Between 1985 and 2015, the proportion of female students specializing in education decreased by nearly half but the proportion of female students in engineering has increased seven-fold (Fig. X).  
+- says something about increased access of women to engineering.
   
 *Shifts in female PhD recipients by field (1985, 2000, 2015)*
   Comparing total PhD students, there is a significant effect of year on proportion of female students in the physical sciences, (_X_^2^(`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001), engineering (_X_^2^(`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001), education (_X_^2^(`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001), and the humanities and arts (_X_^2^(`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001). 
   To determine if the composition of female PhD recipients has shifted thorugh time, we assessed the proportions of women awarded PhDs across these same four focal fields of study. We found that the types of PhDs awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r female_phd2$parameter`) = `r female_phd2$statistic`, *p* < 0.001). There has been a growing shift towards STEM fields (engineering and the physical & earth sciences) through time (Fig. stacked bar plot). While the majority of women received their advanced degrees in either education or the humanities & arts (combined total = 86.4%) in 1985, we see a steady diversification of interests across years with more equal representation across fields in the present day female graduate populace.
 ...(NOT SURE WHERE TO PUT THIS YET) This is reflected in the growing proportion of female students in the total number of students in the physical sciences has doubled between 1985 (0.16) and 2015 (0.34) and quadrupled between 1985 (0.06) and 2015 (0.23) in engineering.
+
 
 *Salary differences between male and female PhD recipients*
 
