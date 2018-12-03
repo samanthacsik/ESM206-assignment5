@@ -28,7 +28,152 @@ knitr::opts_chunk$set(echo = TRUE)
   Using data provided by the National Scienc Foundatio's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
   We lastly constructed a multivariate linear model to describe faculty salary based on X, Y, Z. We later suggest additional parameters that we believe may help to better inform our model.
  
-**Analysis & Disucssion**
+**Analysis & Discussion**
+```{r load packages and data, include = FALSE}
+
+library(tidyverse)
+library(reshape2) 
+library(effsize)
+library(scales)
+library(extrafont)
+library(car)
+library(stargazer)
+library(beyonce)
+
+enrollment <- read_csv("grad_enrollment_copy.csv")
+postdoc_salary <- read_csv("median_salary_copy.csv")
+fields <- read_csv("phds_by_field_copy.csv")
+faculty_salary <- read_csv("faculty_salary.csv")
+phd_fields_field <- read_csv("phds_field_field.csv")
+
+```
+
+##### Trends in gender distribution of doctoral students
+```{r total enrollment plot}
+#### subset total males and females ####
+total_males <- enrollment %>% 
+  select(year, total_males) %>% 
+  mutate(total = total_males) %>% # add column called "total" that is equal to the "total_males" column so that we can plot males and females on same plot with same y-axis 
+  mutate(sex = rep("male", length(total_males))) %>% 
+  select(year, total, sex)
+
+total_females <- enrollment %>% 
+  select(year, total_females) %>% 
+  mutate(total = total_females) %>%  # add column called "total" that is equal to the "total_females" column so that we can plot males and females on same plot with same y-axis
+  mutate(sex = rep("female", length(total_females))) %>% 
+  select(year, total, sex)
+
+total <- rbind(total_males, total_females)
+
+#### plot trends through time ####
+total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color = sex)) +
+  geom_point(size = 2, alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
+  labs(x = "Year", y = "Total Male & Female Graduate Student \nEnrollment in the U.S.") +
+  scale_y_continuous(labels = scales::scientific) +
+  scale_color_manual(values = c("grey11", "gray48")) +
+  annotate("text", 
+           x = 2010, 
+           y = 940000, 
+           label = "y = 9096x - 1.7e+07", 
+           family = "Times New Roman", 
+           size = 3) +
+  annotate("text", 
+           x = 2010, 
+           y = 880000, 
+           label = "italic(R)^2 == 0.85", 
+           parse = TRUE, 
+           family = "Times New Roman", 
+           size = 3) +
+  annotate("text", 
+           x = 1999, 
+           y = 1600000, 
+           label = "y = 3.01e+04x - 5.9e+07", 
+           family = "Times New Roman", 
+           size = 3) +
+  annotate("text", 
+           x = 1999, 
+           y = 1550000, 
+           label = "italic(R)^2 == 0.98", 
+           parse = TRUE, 
+           family = "Times New Roman", 
+           size = 3) 
+
+total_enroll_plot
+# Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9096, t(47) = 16.61, *p* <0.001) and females (*b* =  3.013e+04, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9096(year) - 1.7e+07, female enrollment =  3.01e+04(year) - 5.9e+07) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
+```
+Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollment in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, female enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
+
+Things to research for discussion:
+-social changes -- women away from being stay-at-home moms/housekeepers and towards being higher degree earners in the workforce
+-why have then increased faster than males??
+
+##### Female graduate enrollment in Physical Sciences, Engineering, Education, and the Humanities and Arts
+
+```{r stacked bar chart}
+#### subset out females by field from years 1985, 2000, 2015 ####
+female_phd <- fields %>% 
+  filter(field == "phys_earth_female" | 
+           field == "engineering_female" | 
+           field == "edu_female" | 
+           field == "humanities_arts_female") %>% 
+  select(field, `1985_raw`, `2000_raw`, `2015_raw`) %>% 
+  rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`) 
+
+
+#### find total females across all four fields for each year and subset out each year's total ####
+female_phd_total <- female_phd %>% 
+  summarise(
+    total_1985 = sum(`1985`),
+    total_2000 = sum(`2000`),
+    total_2015 = sum(`2015`)
+  )
+
+tot_1985 <- female_phd_total$total_1985
+tot_2000 <- female_phd_total$total_2000
+tot_2015 <- female_phd_total$total_2015
+
+#### add column to female_phd df with calculated percentages ####
+female_phd_perc <- female_phd %>% 
+  mutate(perc_1985  = round((`1985`/tot_1985) * 100, 1), perc_2000 = round((`2000`/tot_2000) * 100, 1), perc_2015 = round((`2015`/tot_2015) * 100, 1)) %>% # calculate percentage of females within each of the four fields
+  select(field, perc_1985, perc_2000, perc_2015) %>% 
+  mutate(
+    field_long = case_when( # do this so legend labels are correct
+      field == "edu_female" ~ "Education",
+      field == "humanities_arts_female" ~ "Humanities & Arts",
+      field == "engineering_female" ~ "Engineering",
+      field == "phys_earth_female" ~ "Physical & Earth Sciences"
+    )
+  )
+
+#### convert to long format ####
+female_phd_long <- melt(female_phd_perc, variable.name = "year", value.name = "percent") %>% 
+ mutate(
+   year_long = case_when(
+     year == "perc_1985" ~ "1985",
+     year == "perc_2000" ~ "2000",
+     year == "perc_2015" ~ "2015"
+   )
+ ) %>% 
+  select(field_long, year_long, percent)
+
+#### create stacked barplot ####
+female_phd_plot <- ggplot(female_phd_long, aes(x = year_long, y = percent, fill = field_long)) + 
+  geom_bar(stat = "identity", colour = "black") +
+  geom_text(aes(x = year_long, y = percent, label = paste0(percent,"%")), size = 4,
+            position = position_stack(vjust = 0.5)) +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
+  scale_y_continuous(expand = c(0,0), limits = c(0,110)) +
+  labs(x = "Year", y = "Female PhD Recipients by Field (%)") +
+  scale_fill_manual(name = "Field of Study", values = c("snow4", "mediumaquamarine", "thistle4", "slategray2"))
+
+female_phd_plot
+```
+Between 1985 and 2015, female interests in the four focal fields (Physical Sciences, Engineering, Education, and the Humanities and Arts) have shifted. Between 1985 and 2015, the proportion of female students specializing in education decreased by nearly half but the proportion of female students in engineering has increased seven-fold (Fig. 1).  
+- says something about increased access of women to engineering
 
 *Male and female graduate student enrollment in the U.S. (1967-2015)*
   Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollemnt in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, females enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
