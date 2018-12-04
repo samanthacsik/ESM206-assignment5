@@ -3,8 +3,6 @@ title: "Trends in Graduate Enrollment, Shifting Fields of Study, and Faculty Sal
 author: "Sam Csik, An Bui"
 date: "5 December 2018"
 output: word_document
-editor_options: 
-  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -17,18 +15,17 @@ knitr::opts_chunk$set(echo = TRUE)
 -	In the US specifically, faculty salary has increased but female faculty consistently earn less than male faculty (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp) 
 
 *Objectives* (we should put this in intro this time):  
-  The following report uses publicly available demographic data to evaluate changes in the types of advanced academic degrees sought and by whom, as well as the salaries of doctorate degree earners at different stages of their careers. We use these data to assess: 
-  (1) trends in the gender distribution of doctoral students in the US from 1985-2015,
-  (2) shifts in female enrollment in doctoral programs in the Education, Engineering, Humanities & Arts, and the Physical Sciences. We do this by asking 
-    (i) how the proportion of female graduate students in these fields have changed, and   
-    (ii) how female graduate student research interests have shifted between these four fields
-  (3) differences in salaries, by sex, after receiving a PhD 
-  (4) variables that may predict faculty salaries.
+  The following report uses publicly available demographic data to evaluate changes in the types of advanced academic degrees sought and by whom, as well as salaries of doctorate degree earners both inside and outside academia and at different stages of their careers. We use these data to assess: 
+-	trends in the gender distribution of doctoral students in the US from 1985-2015,   
+-	shifts in female enrollment in doctoral programs in the Physical Sciences, Engineering, Education, and the Humanities and Arts in two ways:  
+    - how female graduate student research interests have shifted between these four fields, and  
+    - how the proportion of female graduate students in these fields have changed  
+-	differences in salaries, by sex, after receiving a PhD 
+-	variables that may predict faculty salaries.
 
 **Data & Methods:**
   All data were analyzed using R version 3.5.1. We first investigated changes in graduate student enrollment in the United States using data provided by the National Center for Education Statistics (NCES) (cite). We modeled the relationship between year and male and female graduate student enrollment between 1967 and 2015 by fitting linear equations to data on each sex and comparing the rate of change between the two groups.
-  Using data provided by the National Science Foundation's (NSF) Survey of Earned Doctorates (SED) (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time ($alpha$ = 0.05). ADD AN'S ANALYSIS HERE. 
-  To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05). Data was again provided by NSF's SED.
+  Using data provided by the National Scienc Foundatio's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
   We lastly constructed a multivariate linear model to describe faculty salary based on X, Y, Z. We later suggest additional parameters that we believe may help to better inform our model.
  
 **Analysis & Discussion**
@@ -41,13 +38,14 @@ library(scales)
 library(extrafont)
 library(car)
 library(stargazer)
-library(wesanderson)
+library(beyonce)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
 postdoc_salary <- read_csv("median_salary_copy.csv")
 fields <- read_csv("phds_by_field_copy.csv")
 faculty_salary <- read_csv("faculty_salary.csv")
 phd_fields_field <- read_csv("phds_field_field.csv")
+
 ```
 
 ##### Trends in gender distribution of doctoral students
@@ -104,17 +102,16 @@ total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color =
            size = 3) 
 
 total_enroll_plot
-
 # Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9096, t(47) = 16.61, *p* <0.001) and females (*b* =  3.013e+04, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9096(year) - 1.7e+07, female enrollment =  3.01e+04(year) - 5.9e+07) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
 ```
- *Male and female graduate student enrollment in the U.S. (1967-2015)*
-  Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollemnt in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, females enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
+Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollment in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, female enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
 
 Things to research for discussion:
 -social changes -- women away from being stay-at-home moms/housekeepers and towards being higher degree earners in the workforce
 -why have then increased faster than males??
 
 ##### Female graduate enrollment in Physical Sciences, Engineering, Education, and the Humanities and Arts
+
 ```{r stacked bar chart}
 #### subset out females by field from years 1985, 2000, 2015 ####
 female_phd <- fields %>% 
@@ -171,415 +168,24 @@ female_phd_plot <- ggplot(female_phd_long, aes(x = year_long, y = percent, fill 
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
   scale_y_continuous(expand = c(0,0), limits = c(0,110)) +
   labs(x = "Year", y = "Female PhD Recipients by Field (%)") +
-  # scale_fill_manual(name = "Field of Study", values = c("snow4", "mediumaquamarine", "thistle4", "slategray2"))
-  scale_fill_manual(name = "Field of Study", values = wes_palette(name = "GrandBudapest2", 4, type = c("discrete")))
+  scale_fill_manual(name = "Field of Study", values = c("snow4", "mediumaquamarine", "thistle4", "slategray2"))
 
 female_phd_plot
-
-# Figure stacked barplot: Percentage of PhDs awarded to female recipients, by field, from 1985, 2000, & 2015. PhDs awarded to female graduate students in 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) were assessed across 4 focal fields of study: Education, Engineering, Humanities & Arts, Physical & Earth Sciences. The fields in which PhDs were awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r x2_test$parameter`) = `r x2_test$statistic`, *p* < 0.001). Data source: NSF SED (2015).
-
-#### wrangle data into format for eventual presentation ####
-female_phd_chi2_present <- fields %>%
-  filter(field == "phys_earth_female" | # filter for desired fields of study
-           field == "engineering_female" | 
-           field == "edu_female" | 
-           field == "humanities_arts_female") %>% 
-  select(field, `1985_raw`, `2000_raw`, `2015_raw`) %>%  # select raw data from years of interest
-  rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`) %>% # rename year variables 
-  mutate(perc_1985  = round((`1985`/tot_1985) * 100, 1), perc_2000 = round((`2000`/tot_2000) * 100, 1), perc_2015 = round((`2015`/tot_2015) * 100, 1)) %>% # calculate percentage of females within each of the four fields
-  select(field, `1985`, perc_1985, `2000`, perc_2000, `2015`, perc_2015)
-
-# Table 2: PhDs awarded to female graduate students, by field and year. Values indicated are counts, with proportions (by field of study) in italics. Data source: NSF SED (2015).
-
-#### wrangle data into format for chi2 test ####
-female_phd2 <- fields %>% 
-  filter(field == "edu_female" | 
-        field == "engineering_female" |
-        field == "humanities_arts_female" |
-        field == "phys_earth_female") %>% 
-  select(`1985_raw`, `2000_raw`, `2015_raw`) %>% 
-  rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`) 
-
-rownames(female_phd2) <- c("Physical & Earth Sciences", "Engineering", "Education", "Humanities & Arts")
-
-#### chi2 test (use female_phd df from earlier section to run test) ####
-# QUESTION: Is there a significant effect of year on the proportion of PhD type awarded to female graduate students?
-x2_test <- chisq.test(female_phd2)
-# FINDING: Field of study differs significantly for female PhD recipients in the years 1985, 2000, and 2015.
 ```
-
-```{r An's chi square}
-#### chi square for 1985 ####
-fields_85 <- phd_fields_field %>%
-  filter(year == "1985",
-         field == "lifesci" |
-           field == "physsci" |
-           field == "math" |
-           field == "psych" |
-           field == "eng" |
-           field == "edu" |
-           field == "arts" |
-           field == "other") %>%
-  select("male", "female")
-
-rownames(fields_85) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
-
-fields_85_prop <- phd_fields_field %>%
-  filter(year == "1985",
-         field == "lifesci" |
-           field == "physsci" |
-           field == "math" |
-           field == "psych" |
-           field == "eng" |
-           field == "edu" |
-           field == "arts" |
-           field == "other") %>%
-  select("male_prop", "female_prop")
-
-rownames(fields_85_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
-
-fields85_chi <- chisq.test(fields_85)
-fields85_chi
-# proportions are different, no shit
-
-#### chi square for 2000 ####
-fields_00 <- phd_fields_field %>%
-  filter(year == "2000",
-         field == "lifesci" |
-           field == "physsci" |
-           field == "math" |
-           field == "psych" |
-           field == "eng" |
-           field == "edu" |
-           field == "arts" |
-           field == "other") %>%
-  select("male", "female")
-
-rownames(fields_00) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
-
-fields_00_prop <- phd_fields_field %>%
-  filter(year == "2000",
-         field == "lifesci" |
-           field == "physsci" |
-           field == "math" |
-           field == "psych" |
-           field == "eng" |
-           field == "edu" |
-           field == "arts" |
-           field == "other") %>%
-  select("male_prop", "female_prop")
-
-rownames(fields_00_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
-
-fields00_chi <- chisq.test(fields_00)
-fields00_chi
-# proportions are different
-
-#### chi square for 2015 ####
-fields_15 <- phd_fields_field %>%
-  filter(year == "2015",
-         field == "lifesci" |
-           field == "physsci" |
-           field == "math" |
-           field == "psych" |
-           field == "eng" |
-           field == "edu" |
-           field == "arts" |
-           field == "other") %>%
-  select("male", "female")
-
-rownames(fields_15) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
-
-fields_15_prop <- phd_fields_field %>%
-  filter(year == "2015",
-         field == "lifesci" |
-           field == "physsci" |
-           field == "math" |
-           field == "psych" |
-           field == "eng" |
-           field == "edu" |
-           field == "arts" |
-           field == "other") %>%
-  select("male_prop", "female_prop")
-
-rownames(fields_15_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu", "arts", "other")
-
-fields15_chi <- chisq.test(fields_15)
-fields15_chi
-#proportions are different
-```
-
-```{r specialty line graph} 
-line_df <- phd_fields_field %>% 
-  filter(year == "1985" |
-           year == "2000" |
-           year == "2015") %>%
-  filter(field == "physsci" |
-           field == "eng" |
-           field == "edu" |
-           field == "arts") %>% 
-  mutate(
-    Field = case_when(
-      field == "edu" ~ "Education",
-      field == "eng" ~ "Engineering",
-      field == "arts" ~ "Humanities & Arts",
-      field == "physsci" ~ "Physical & Earth Sciences"
-    ))
-  select("Field", "year", "female_prop")
-
-physsci <- phd_fields_field %>% 
-  filter(field == "physsci") %>% 
-  select("year", "female_prop")
-
-eng <- phd_fields_field %>% 
-  filter(field == "eng") %>% 
-  select("year", "female_prop")
-
-edu <- phd_fields_field %>% 
-  filter(field == "edu") %>% 
-  select("year", "female_prop")
-
-arts <- phd_fields_field %>% 
-  filter(field == "arts") %>% 
-  select("year", "female_prop")
-
-line_x = "Year"
-line_y = "Proportion of female students in total population"
-
-fields_line <- ggplot(line_df, aes(x = year, y = female_prop, group = Field, color = Field)) +
-  geom_line() +
-  geom_point(size = 3) +
-  scale_x_continuous(breaks = c(1985, 2000, 2015), labels = c("1985", "2000", "2015")) +
-  scale_color_manual(name = "Field of Study", values = wes_palette(name = "GrandBudapest2", 4, type = c("discrete"))) +
-  expand_limits(y = 1) +
-  theme_bw() +
-  theme(panel.grid.minor = element_line(linetype = "blank")) +
-  labs(x = line_x, y = line_y)
-  
-fields_line
-
-#DOES THIS CAPTION MAKE SENSE???
-
-# Figure X. Proportions of female PhD recipients in four focal fields of study as compared to the total populace of female PhD recipients through time. The proportion of PhDs awarded to female graduate students in 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) across four focal fields of study: Education, Engineering, Humanities & Arts, and Physical & Earth Sciences, were assessed in relation to the entire PhD student populace in the U.S. in 1985 (n = ), 2000 (n = ), 2015 (n = ). Data source: NSF SED.
-```
-
-```{r chi square again}
-#### physsci ####
-physsci_x2df <- phd_fields_field %>% 
-  filter(field == "physsci") %>% 
-  select("male", "female")
-
-rownames(physsci_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
-
-physsci_x2 <- chisq.test(physsci_x2df)
-physsci_x2
-
-#### eng ####
-eng_x2df <- phd_fields_field %>% 
-  filter(field == "eng") %>% 
-  select("male", "female")
-
-rownames(eng_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
-
-eng_x2 <- chisq.test(eng_x2df)
-eng_x2
-
-#### edu ####
-edu_x2df <- phd_fields_field %>% 
-  filter(field == "edu") %>% 
-  select("male", "female")
-
-rownames(edu_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
-
-edu_x2 <- chisq.test(edu_x2df)
-edu_x2
-
-#### arts ####
-arts_x2df <- phd_fields_field %>% 
-  filter(field == "arts") %>% 
-  select("male", "female")
-
-rownames(arts_x2df) <- c("1985", "1990", "1995", "2000", "2005", "2010", "2015")
-
-arts_x2 <- chisq.test(arts_x2df)
-arts_x2
-```  
-
-*Shifts in female PhD recipients by field (1985, 2000, 2015)*
-  To determine if the composition of female PhD recipients has shifted thorugh time, we assessed the proportions of women awarded PhDs across four focal fields of study: Education Engineering, Humanities & Arts, and Physical & Earth Sciences. We found that the types of PhDs awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r x2_test$parameter`) = `r x2_test$statistic`, *p* < 0.001). There has been a growing shift towards STEM fields (engineering and the physical & earth sciences) through time (Fig. stacked bar plot). While the majority of women received their advanced degrees in either education or the humanities & arts (combined total = 86.4%) in 1985, we see a steady diversification of interests across years with more equal representation across fields in the present day female graduate populace.
-  Despite this diversification among women graduate students, underrepresentation of women in STEM fields across the entire U.S. graduate student populace (males and females) remains a common __...
-  Comparing total PhD students, there is a significant effect of year on proportion of female students in the physical sciences, (_X_^2^(`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001), engineering (_X_^2^(`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001), education (_X_^2^(`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001), and the humanities and arts (_X_^2^(`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001). 
-
-```{r male & female salaries for starting postdoc and other employment positions (2015)}
-#### make data into long format ####
-postdoc_salary_long <- melt(postdoc_salary, variable.name = "employment_status", value.name = "salary") 
-
-#### add column with "sex" ####
-postdoc_salary_new <- postdoc_salary_long %>%
-  mutate(
-    sex = case_when(
-      employment_status == "employment_males" ~ "Male",
-      employment_status == "postdoc_study_males" ~ "Male",
-      employment_status == "employment_females" ~ "Female",
-      employment_status == "postdoc_study_females" ~ "Female"
-    )
-  ) %>% 
-  mutate(
-    status = case_when(
-      employment_status == "employment_males" ~ "Employed",
-      employment_status == "postdoc_study_males" ~ "Postdoc-study",
-      employment_status == "employment_females" ~ "Employed",
-      employment_status == "postdoc_study_females" ~ "Postdoc-study"
-    )
-  )
-
-
-### make status a factor, and list levels in the desired facet order ####
-postdoc_salary_new$status<- factor(postdoc_salary_new$status, levels=c("Postdoc-study", "Employed"))
-
-#### boxplot of employment males vs. females & postdoc males vs. females ####
-postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
-  geom_boxplot(aes(group = sex, fill = factor(sex))) +
-  scale_fill_manual(values = c("white", "darkgrey"), name = "Sex") +
-  facet_grid(~ status) +
-  labs(x = "", y = "Salary (USD)") +
-  scale_y_continuous(label = dollar_format()) +
-  theme_classic() +
-  theme(
-    axis.text.x = element_blank(),
-    axis.ticks.x=element_blank(),
-    panel.border = element_rect(colour = "black", fill=NA, size=0.7))
-
-postdoc_salary_plot
-
-# Figure 3: Median annual salary (USD) for doctorate recipients with definite postgraduations plans in the U.S., by sex (2015). Median salary does not significantly differ between males and females, regardless of postgraduation plans (*p* > 0.05). Data source: NSF SED (2015).
-
-#### separately subset males & females by employed & postdoc status ####
-male_postdoc <- postdoc_salary_new %>% 
-  filter(sex == "Male", status == "Postdoc-study")
-
-female_postdoc <- postdoc_salary_new %>% 
-  filter(sex == "Female", status == "Postdoc-study")
-
-male_employed <- postdoc_salary_new %>% 
-  filter(sex == "Male", status == "Employed")
-
-female_employed <- postdoc_salary_new %>% 
-  filter(sex == "Female", status == "Employed")
-
-#### separately subset all postdocs and all employed ####
-postdoc <- postdoc_salary_new %>% 
-  filter(status == "Postdoc-study")
-
-employed <- postdoc_salary_new %>% 
-  filter(status == "Employed")
-
-#### find differences in median postdoc vs. median employed salary ####
-median_postdoc <- median(postdoc$salary) #45,000
-median_employed <- median(employed$salary) #75,000
-
-##############################
-# data is not continuous (pre-calculated median salaries by sex and field), so instead run a nonparametric test comparing salaries between males and females for postdoc and employment positions
-  # Advantages of non-parametric tests:
-    # no assumption of normality or equal variance
-    # compares medians (which is actually a better parameter for income comparisons)
-# Use a Mann-Whitney U test (non-parametric alternative for unparied t-test)
-  # H0: ranks are equal
-  # Ha: ranks are unequal
-##############################
-postdoc_u <- wilcox.test(male_postdoc$salary, female_postdoc$salary) # p = 0.87
-# Median salary does not significantly differ between males and females starting postdoc positions in 2015.
-
-employed_u <- wilcox.test(male_employed$salary, female_employed$salary) # p = 0.33
-# Median salary does not significantly differ between males and females PhD recipients in non-postdoc employment positions.
-
-position_u <- wilcox.test(postdoc$salary, employed$salary) # p < 0.001
-# Median salary does significantly differ PhD recipients in postdoc vs. non-postdoc positions in 2015.
-
-#### effect size ####
-postdoc_d <- cliff.delta(male_postdoc$salary, female_postdoc$salary) # negligible
-abs_postdoc <- median(male_postdoc$salary) - median(female_postdoc$salary) # males > females by $3000
-perc_postdoc <- (median(male_postdoc$salary) - median(female_postdoc$salary))/(median(female_postdoc$salary)) * 100 # male postdoc salary 6.7% higher than females
-
-employed_d <- cliff.delta(male_employed$salary, female_employed$salary) # small
-abs_employed <- median(male_employed$salary) - median(female_employed$salary) # males > females by $3417
-perc_employed <- (median(male_employed$salary) - median(female_employed$salary))/(median(female_employed$salary)) * 100  # male employed salary 4.8% higher than females
-
-position_d <- cliff.delta(postdoc$salary, employed$salary) # large
-```
-
-*Salary differences between male and female PhD recipients*
-  We examined the salaries of both male and female PhD recipients in postdoc and non-postdoc employment positions to determine if there were pay disparities between sexes. A Mann-Whitney U test reveals no significant difference between salaries made by male and female postdocs (W = `r postdoc_u$parameter`, *p* = `r round(postdoc_u$p.value, 2)`) with a only a negligible effect size (Cliff's delta = `r round(postdoc_d$estimate, 2)`). Despite overall higher median salaries for PhD recipients (W = `r position_u$parameter`, *p* = < 0.001, Cliff's delta = large) in non-postdoc employment positions, the difference between salaries earned by males and females remains nonsignificant (W = `r employed_u$parameter`, *p* = `r round(employed_u$p.value, 2)`) with only a small effect size (Cliff's delta = `r round(employed_u$estimate, 2)`).
-  Despite these non-significant differences between sexes, males do recieve higher median salaries than women in comparable positions. We found that male postdocs receive salaries 6.7% greater than female postdocs, and employed males receive salaries 4.8% greater than employed women.
-
-*Modeling faculty salary*
-
-```{r visualize faculty_salary data}
-##############################
-# Look at data
-##############################
-
-fac_by_dept_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = salary)) +
-  geom_point(aes(color = rank, pch = sex)) +
-  facet_wrap(~ discipline)
-# too much variability to determine a stat. sig effect between sexes? see models below
-
-##############################
-# Explore relationships between variables that could be correlated
-##############################
-
-# looking for colinearity between years_since and years_service
-years_plot <- ggplot(faculty_salary, aes(x = years_since, y = years_service)) +
-  geom_point()
-# FINDINGS: appear to be correlated (i.e. increase in years_since = ~ linear increase in years_service)
-```
-
-```{r multivariate linear regression for faculty salary}
-
-# run full model then find VIF to look for colinearity
-full_lm1 <- lm(salary ~ rank + discipline + years_since + years_service + sex, data = faculty_salary)
-summary(full_lm1) # R2 = 0.44, p < 0.002
-plot(full_lm1) # does NOT look good. Heteroscedastic??
-vif(full_lm1)
-# FINDINGS: years_since & years_service both have VIF > 4 (some correlation, think critically about possible overlaps); this in combination with "years_plot" make me think that we should drop one of these predictor variables--I'm inclined to keep years_service because I think it makes more sense that the longer that you've been faculty, the higher your rank (see fac_by_dept_plot)--which typically means the higher your salary
-
-# lm 2 includes rank, discipline, sex, years_serive (eliminated years_since becuase it appeared correlated with years_service)
-facsal_lm2 <- lm(salary ~ rank + discipline + years_service + sex, data = faculty_salary)
-summary(facsal_lm2) # R2 = 0.44, p < 0.001 # reference = female, A, Associate Prof
-plot(facsal_lm2) # don't look any better than lm1
-vif(facsal_lm2) # no correlataion between variables GOOD!
-# FINDINGS: not necessarily non-linear (residuals vs fitted); appears to be heteroscedastic (Scale-Location plot)
-
-# lm3 includes discipline, sex, years_service (eliminated rank because rank and years_service should be correlated and may be competing to explain variation...hence why years_service is not sig in lm2)
-facsal_lm3 <- lm(salary ~ discipline + years_service + sex, data = faculty_salary)
-summary(facsal_lm3) # R2 = 0.16...NOT GOOD, p < 0.001 # reference = female, A
-plot(facsal_lm3) # these look A LOT BETTER than lm1, lm2!!! no heteroscedasticity
-vif(facsal_lm3) # no correlation
-```
-
-```{r AIC values}
-#### all disciplines ####
-AIC_full_lm1 <- AIC(full_lm1)
-AIC_full_lm1
-# 9093.826
-
-AIC_lm2 <- AIC(facsal_lm2) # difference of 2 in AIC may be considered not different...this is pretty close to lm1 so I'd be inclined to keep this over the full model
-AIC_lm2
-# 9096.813
-
-AIC_lm3 <- AIC(facsal_lm3) # WELL FUCK. definitely not good, thought i may have been on to something...
-AIC_lm3
-# 9257.162
-```
+Between 1985 and 2015, female interests in the four focal fields (Physical Sciences, Engineering, Education, and the Humanities and Arts) have shifted. Between 1985 and 2015, the proportion of female students specializing in education decreased by nearly half but the proportion of female students in engineering has increased seven-fold (Fig. 1).  
+- says something about increased access of women to engineering
 
 **Conclusion:**
 -	Female involvement in higher education has improved, but there are still steps to be made for progress  
     - While the proportion of female doctoral recipients has increased, only 29% of researchers worldwide are women (cite UNESCO, https://www.tellmaps.com/uis/gender/?lang=en#!/tellmap/79054752)
     - Female candidates for jobs are assessed based on whether or not they have children, regardless of the legality of this assessment  
 -  While the data we have are as much as we can gather, there are missing components that would be useful for parameterizing a model describing faculty salaries
-    - Institution type: research institutions vs liberal arts colleges  
+    - Institution type: research institutions vs liberal arts colleges, public vs private  
+      - in 2016-2017, professors at PhD granting institutions made 20-30% more than professors at liberal arts colleges (cite NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf)  
+      - in 2016-2017, professors at private institutions make 15-20% more than professors at public institutions (also NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf)
     - Race: women make less than men, but Black women, Asian women, and Hispanic women make less than white women (there are numbers, will find later)  
 -	Race is a particularly egregious variable to be left out, especially since it stratifies so much of higher education  
     - 65% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp)  
     -	69% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp)  
     -	82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61)  
+    - Race also informs rank, cite cultural taxation literature (https://www.jstor.org/stable/1176259)
