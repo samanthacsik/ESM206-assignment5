@@ -284,7 +284,6 @@ x2_test <- chisq.test(female_phd2)
 ```
 
 ```{r An's chi square}
-
 #### chi square for 1985 ####
 fields_85 <- phd_fields_field %>%
   filter(year == "1985",
@@ -385,11 +384,9 @@ rownames(fields_15_prop) <- c("lifesci", "physsci", "math", "psych", "eng", "edu
 fields15_chi <- chisq.test(fields_15)
 fields15_chi
 #proportions are different
-
 ```
 
 ```{r specialty line graph} 
-
 line_df <- phd_fields_field %>% 
   filter(year == "1985" |
            year == "2000" |
