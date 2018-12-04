@@ -20,7 +20,7 @@ library(scales)
 library(extrafont)
 library(car)
 library(stargazer)
-library(beyonce)
+library(wesanderson)
 
 enrollment <- read_csv("grad_enrollment_copy.csv")
 postdoc_salary <- read_csv("median_salary_copy.csv")
@@ -235,8 +235,7 @@ female_phd_plot <- ggplot(female_phd_long, aes(x = year_long, y = percent, fill 
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
   scale_y_continuous(expand = c(0,0), limits = c(0,110)) +
   labs(x = "Year", y = "Female PhD Recipients by Field (%)") +
-  scale_fill_manual(name = "Field of Study", values = c("snow4", "mediumaquamarine", "thistle4", "slategray2"))
-
+  scale_color_manual(name = "Field of Study", values = wes_palette(name = "GrandBudapest1", 4, type = c("discrete")))
 female_phd_plot
 
 # Figure 2: Percentage of female PhD recipients, by field, from 1985, 2000, & 2015. Percentages of female PhD recipients from 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) were assessed across 4 focal fields of study: Education, Engineering, Humanities & Arts, Physical & Earth Sciences. Fields assessed include education, Other academic fields have not been considered for this plot.... THIS STILL ISN'T RIGHT...
