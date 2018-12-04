@@ -208,7 +208,7 @@ x2_test <- chisq.test(female_phd2)
 # FINDING: Field of study differs significantly for female PhD recipients in the years 1985, 2000, and 2015.
 ```
 
-```{r An's chi square}
+```{r An chi square}
 #### chi square for 1985 ####
 fields_85 <- phd_fields_field %>%
   filter(year == "1985",
@@ -509,8 +509,8 @@ position_d <- cliff.delta(postdoc$salary, employed$salary) # large
 ```
 
 *Salary differences between male and female PhD recipients*
-  We examined the salaries of both male and female PhD recipients in postdoc and non-postdoc employment positions to determine if there were pay disparities between sexes. A Mann-Whitney U test reveals no significant difference between salaries made by male and female postdocs (W = `r postdoc_u$parameter`, *p* = `r round(postdoc_u$p.value, 2)`) with a only a negligible effect size (Cliff's delta = `r round(postdoc_d$estimate, 2)`). Despite overall higher median salaries for PhD recipients (W = `r position_u$parameter`, *p* = < 0.001, Cliff's delta = large) in non-postdoc employment positions, the difference between salaries earned by males and females remains nonsignificant (W = `r employed_u$parameter`, *p* = `r round(employed_u$p.value, 2)`) with only a small effect size (Cliff's delta = `r round(employed_u$estimate, 2)`).
-  Despite these non-significant differences between sexes, males do recieve higher median salaries than women in comparable positions. We found that male postdocs receive salaries 6.7% greater than female postdocs, and employed males receive salaries 4.8% greater than employed women.
+  We examined the salaries of both male and female PhD recipients in postdoc and non-postdoc employment positions to determine if there were pay disparities between sexes. A Mann-Whitney U test reveals no significant difference between salaries made by male and female postdocs (W = `r postdoc_u$parameter`, *p* = `r round(postdoc_u$p.value, 2)`) with a only a negligible effect size (Cliff's delta = `r round(postdoc_d$estimate, 2)`). In spite of overall higher median salaries for PhD recipients in non-postdoc employment positions (W = `r position_u$parameter`, *p* = < 0.001, Cliff's delta = large), the difference between salaries earned by males and females remains nonsignificant (W = `r employed_u$parameter`, *p* = `r round(employed_u$p.value, 2)`) with only a small effect size (Cliff's delta = `r round(employed_u$estimate, 2)`).
+  Despite these non-significant differences between sexes, males do recieve higher median salaries than women in comparable positions. We found that male postdocs receive salaries 6.7% greater than female postdocs, and employed males receive salaries 4.8% greater than employed women suggesting that there is still work to be done to close the wage gap between sexes BLAH BLAH CAN'T WRITE WELL ANYMORE...
 
 *Modeling faculty salary*
 
