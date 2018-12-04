@@ -10,11 +10,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 **Introduction: ** 
--	Women have improved access to post-baccalaureate education  
--	However, there is much gender disparity in discipline-specific involvement and salaries  
--	In the US specifically, faculty salary has increased but female faculty consistently earn less than male faculty (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp) 
+  In the last few decades, more women have pursued higher education than ever before. Over 40 years from 1966 to 2016, the percent of female high school graduates enrolled in college or university has grown from almost 30%, from 42.7% to 71.9% (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp?current=yes). Female bachelor's degree recipients have grown from 43.1% to 57.3% in the same time span (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_318.10.asp?current=yes). 
+  Though there are clear trends of improving female pursuit of higher education, there is much gender disparity in discipline-specific involvement and salaries. In 2016, only 31% of Bachelor's degrees in Science, Technology, Engineering, and Mathematics (STEM) fields were conferred upon women. After graduating, salary prospects are similarly discouraging: women make 31% less than their male counterparts in STEM professions. In faculty positions, salary has increased but female faculty consistently earn less than male faculty (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp). Given this disparity (find a different word later), it is imperative to know what the nature of sexist bias in academia, and where efforts, however small, may be made to mitigate it.
 
-*Objectives* (we should put this in intro this time):  
+*Objectives:*  
   The following report uses publicly available demographic data to evaluate changes in the types of advanced academic degrees sought and by whom, as well as salaries of doctorate degree earners both inside and outside academia and at different stages of their careers. We use these data to assess: 
 -	trends in the gender distribution of doctoral students in the US from 1985-2015,   
 -	shifts in female enrollment in doctoral programs in the Physical Sciences, Engineering, Education, and the Humanities and Arts in two ways:  
@@ -25,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Data & Methods:**
   All data were analyzed using R version 3.5.1. We first investigated changes in graduate student enrollment in the United States using data provided by the National Center for Education Statistics (NCES) (cite). We modeled the relationship between year and male and female graduate student enrollment between 1967 and 2015 by fitting linear equations to data on each sex and comparing the rate of change between the two groups.
-  Using data provided by the National Scienc Foundatio's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
+  Using data provided by the National Science Foundation's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
   We lastly constructed a multivariate linear model to describe faculty salary based on X, Y, Z. We later suggest additional parameters that we believe may help to better inform our model.
  
 **Analysis & Discussion**
