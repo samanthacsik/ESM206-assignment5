@@ -606,8 +606,6 @@ Explore relationships between variables in the ‘Faculty salary data (2008 - 20
 fac_by_dept_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = salary)) +
   geom_point(aes(color = rank, pch = sex)) +
   facet_wrap(~ discipline)
-
-fac_by_dept_plot
 # too much variability to determine a stat. sig effect between sexes? see models below
 
 ##############################
