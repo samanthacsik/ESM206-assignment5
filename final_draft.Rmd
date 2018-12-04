@@ -514,19 +514,13 @@ position_d <- cliff.delta(postdoc$salary, employed$salary) # large
 *Modeling faculty salary*
 
 ```{r visualize faculty_salary data}
-##############################
-# Look at data
-##############################
-
+#### Look at data ####
 fac_by_dept_plot <- ggplot(data = faculty_salary, aes(x = years_service, y = salary)) +
   geom_point(aes(color = rank, pch = sex)) +
   facet_wrap(~ discipline)
 # too much variability to determine a stat. sig effect between sexes? see models below
 
-##############################
-# Explore relationships between variables that could be correlated
-##############################
-
+#### Explore relationships between variables that could be correlated ####
 # looking for colinearity between years_since and years_service
 years_plot <- ggplot(faculty_salary, aes(x = years_since, y = years_service)) +
   geom_point()
@@ -572,9 +566,10 @@ AIC_lm3
 
 ```{r make table using stargazer}
 stargazer(full_lm1, facsal_lm2, facsal_lm3, type = "html")
-
 # to view, I created a .Rhtml file called "stargazer", deleted all text except for "<html>" tags, copied stargazer output and knitted. You can then copy the produced table into a word document
 ```
+
+
 
 **Conclusion:**
 -	Female involvement in higher education has improved, but there are still steps to be made for progress  
