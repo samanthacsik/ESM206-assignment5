@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 **Introduction: ** 
-  In the last few decades, more women have pursued higher education than ever before. Over 40 years from 1966 to 2016, the percent of female high school graduates enrolled in college or university has grown from almost 30%, from 42.7% to 71.9% (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp?current=yes). Female bachelor's degree recipients have grown from 43.1% to 57.3% in the same time span (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_318.10.asp?current=yes). 
+  In the last few decades, more women have pursued higher education than ever before. Starting in the 1960s, higher education in the United States became more accessible to women with the admission of female applicants to Ivy League schools to the abolishment of gender quotas in admission processes (cite Jones 2009). Over 40 years from 1966 to 2016, the percent of female high school graduates enrolled in college or university has grown from almost 30%, from 42.7% to 71.9% (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp?current=yes). Female bachelor's degree recipients have grown from 43.1% to 57.3% in the same time span (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_318.10.asp?current=yes). 
   Though there are clear trends of improving female pursuit of higher education, there is much gender disparity in discipline-specific involvement and salaries. In 2016, only 31% of Bachelor's degrees in Science, Technology, Engineering, and Mathematics (STEM) fields were conferred upon women. After graduating, salary prospects are similarly discouraging: women make 31% less than their male counterparts in STEM professions. In faculty positions, salary has increased but female faculty consistently earn less than male faculty (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp). Given this disparity (find a different word later), it is imperative to know what the nature of sexist bias in academia, and where efforts, however small, may be made to mitigate it.
 
 *Objectives:*  
@@ -570,9 +570,8 @@ stargazer(full_lm1, facsal_lm2, facsal_lm3, type = "html")
 
 
 
-**Conclusion:**
--	Female involvement in higher education has improved, but there are still steps to be made for progress  
-    - While the proportion of female doctoral recipients has increased, only 29% of researchers worldwide are women (cite UNESCO, https://www.tellmaps.com/uis/gender/?lang=en#!/tellmap/79054752)
+**Discussion and Caveats:**
+  While our report demonstrates that female involvement in higher education has improved, there are still steps to be made for progress. We show that the proportion of female doctoral recipients has increased, only 29% of researchers worldwide are women (cite UNESCO, https://www.tellmaps.com/uis/gender/?lang=en#!/tellmap/79054752)
     - Female candidates for jobs are assessed based on whether or not they have children, regardless of the legality of this assessment  
 -  While the data we have are as much as we can gather, there are missing components that would be useful for parameterizing a model describing faculty salaries
     - Institution type: research institutions vs liberal arts colleges, public vs private  
