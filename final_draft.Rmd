@@ -568,26 +568,9 @@ stargazer(full_lm1, facsal_lm2, facsal_lm3, type = "html")
 # to view, I created a .Rhtml file called "stargazer", deleted all text except for "<html>" tags, copied stargazer output and knitted. You can then copy the produced table into a word document
 ```
 
-<<<<<<< HEAD
 *Modeling faculty salary*
  We sought to predict faculty salary using multiple linear regression given several factors and career-related characterisitcs from data provided by Fox & Weisberg 2011. We built three candidate models (Table X), then selected from them using the following criteria: (1) we estimated goodness of fit using the coefficient of determiniation (R^2^) for each model, (2) we then computed Aikaike Information Criterion (AIC) values to evaluate the relative support for each model, and (3) we finally assessed the validity of including or eliminating each predictor variable based on genearal knowledge of different determinants of salary and prior published literature.
  Our full model includes rank (associate professor, assistant professor, full professor), discipline (theoretical fields, applied fields), years since earning PhD (years_since), years of service as a faculty member (years_service), and sex (male, female) as predictor variables for faculty salary. Because years_since and years_service are moderately correlated, (VIF = 5.9 & 7.5, respectively), we pruned this full model by removing years_since to generate model 2. This choice was made because the number of years experience is often a primary factor considered in salary determination across many fields (cite?). Despite model 2 having a slightly lower fit (R^2^ = 0.441) and marginally higher AIC (AIC = 9096.8) than the full model 1 (R^2^ = 0.446, AIC = 9093.8), we feel more confident in our support of model 2 such that colinearity is not an issue among predictor variables. 
-
-**Conclusion:**
--	Female involvement in higher education has improved, but there are still steps to be made for progress  
-    - While the proportion of female doctoral recipients has increased, only 29% of researchers worldwide are women (cite UNESCO, https://www.tellmaps.com/uis/gender/?lang=en#!/tellmap/79054752)
-    - Female candidates for jobs are assessed based on whether or not they have children, regardless of the legality of this assessment  
--  While the data we have are as much as we can gather, there are missing components that would be useful for parameterizing a model describing faculty salaries
-    - Institution type: research institutions vs liberal arts colleges, public vs private  
-      - in 2016-2017, professors at PhD granting institutions made 20-30% more than professors at liberal arts colleges (cite NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf)  
-      - in 2016-2017, professors at private institutions make 15-20% more than professors at public institutions (also NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf)
-    - Race: women make less than men, but Black women, Asian women, and Hispanic women make less than white women (there are numbers, will find later)  
--	Race is a particularly egregious variable to be left out, especially since it stratifies so much of higher education  
-    - 65% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp)  
-    -	69% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp)  
-    -	82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61)  
-=======
->>>>>>> 60e038bdd7f6bb599109756e85c1ef5a87ecf6b2
 
 **Main Points:**
   In this report, we analyzed data on female enrollment in doctoral programs and involvement in 4 focal fields of study (Physical Sciences, Engineering, Education, and Humanities and Arts). We also compared salaries of men and women in post-doctoral positions and created a model describing how faculty salaries are influenced by variables relating to gender, rank, and discipline. We find that:
