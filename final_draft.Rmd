@@ -10,22 +10,22 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 **Introduction: ** 
-  In the last few decades, more women have pursued higher education than ever before. Beginning in the 1960s, higher education in the United States became more accessible to women with the admission of female applicants to Ivy League schools to the abolishment of gender quotas in admission processes (cite Jones 2009, https://www.jstor.org/stable/40268002). From 1966 to 2016, the percentage of female high school graduates enrolled in higher education programs has grown almost 30%, from 42.7% to 71.9% (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp?current=yes). Female bachelor's degree recipients have grown from 43.1% to 57.3% in the same time span (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_318.10.asp?current=yes). 
-  Though there are clear trends of improving female pursuit of higher education, gender disparity in discipline-specific involvement and salaries still exists. In 2016, only 31% of Bachelor's degrees in Science, Technology, Engineering, and Mathematics (STEM) fields were conferred upon women. After graduating, salary prospects are similarly discouraging: women make 31% less than their male counterparts in STEM professions. Despite an overall increase in the salaries of faculty members, female faculty consistently earn less than their male counterparts (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp). Given this pay inequality, it is imperative to know what the nature of the implicit bias beast in academia, and where efforts, however small, may be made to mitigate it.
+  In the last few decades, more women have pursued higher education than ever before. Starting in the 1960s, higher education in the United States became more accessible to women with the admission of female applicants to Ivy League schools to the abolishment of gender quotas in admission processes (cite Jones 2009, https://www.jstor.org/stable/40268002). Over 40 years from 1966 to 2016, the percent of female high school graduates enrolled in college or university has grown from almost 30%, from 42.7% to 71.9% (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_302.10.asp?current=yes). Female bachelor's degree recipients have grown from 43.1% to 57.3% in the same time span (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_318.10.asp?current=yes). 
+  Though there are clear trends of improving female pursuit of higher education, there is much gender disparity in discipline-specific involvement and salaries. In 2016, only 31% of Bachelor's degrees in Science, Technology, Engineering, and Mathematics (STEM) fields were conferred upon women. After graduating, salary prospects are similarly discouraging: women make 31% less than their male counterparts in STEM professions. In faculty positions, salary has increased but female faculty consistently earn less than male faculty (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_316.20.asp). Given this disparity (find a different word later), it is imperative to know what the nature of the implicit bias beast in academia, and where efforts, however small, may be made to mitigate it.
 
 *Objectives:*  
-  The following report uses publicly available demographic data to evaluate changes in the types of advanced academic degrees sought and by whom, as well as salaries of doctorate degree earners at different stages of their careers. We use these data to assess: 
-(1) trends in the gender distribution of doctoral students in the US from 1985-2015,   
-(2) shifts in female enrollment in doctoral programs in the Physical Sciences, Engineering, Education, and the Humanities and Arts in two ways:  
-    (i) how female graduate student research interests have shifted between these four fields, and  
-    (ii) how the proportion of female graduate students (relative to males) in these fields have changed  
-(3) differences in salaries, by sex, after receiving a PhD 
-(4) variables that may predict faculty salaries.
+  The following report uses publicly available demographic data to evaluate changes in the types of advanced academic degrees sought and by whom, as well as salaries of doctorate degree earners both inside and outside academia and at different stages of their careers. We use these data to assess: 
+-	trends in the gender distribution of doctoral students in the US from 1985-2015,   
+-	shifts in female enrollment in doctoral programs in the Physical Sciences, Engineering, Education, and the Humanities and Arts in two ways:  
+    - how female graduate student research interests have shifted between these four fields, and  
+    - how the proportion of female graduate students in these fields have changed  
+-	differences in salaries, by sex, after receiving a PhD 
+-	variables that may predict faculty salaries.
 
 **Data & Methods:**
   All data were analyzed using R version 3.5.1. We first investigated changes in graduate student enrollment in the United States using data provided by the National Center for Education Statistics (NCES) (cite). We modeled the relationship between year and male and female graduate student enrollment between 1967 and 2015 by fitting linear equations to data on each sex and comparing the rate of change between the two groups.
-  Using data provided by the National Scienc Foundation's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
-  We lastly use multiple linear regression to describe faculty salary based on a variety of factors and career-related characteristics. We later suggest additional parameters that we believe may help to better inform our model.
+  Using data provided by the National Science Foundation's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
+  We lastly constructed a multivariate linear model to describe faculty salary based on X, Y, Z. We later suggest additional parameters that we believe may help to better inform our model.
  
 **Analysis & Discussion**
 ```{r load packages and data, include = FALSE}
@@ -65,7 +65,6 @@ total_females <- enrollment %>%
 total <- rbind(total_males, total_females)
 
 #### plot trends through time ####
-pdf("Fig1_enrollment.pdf", width = 5, height = 3)
 total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color = sex)) +
   geom_point(size = 2, alpha = 0.5) +
   geom_smooth(method = "lm") +
@@ -100,12 +99,11 @@ total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color =
            parse = TRUE, 
            family = "Times New Roman", 
            size = 3) 
-total_enroll_plot
-dev.off()
 
+total_enroll_plot
 # Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9096, t(47) = 16.61, *p* <0.001) and females (*b* =  3.013e+04, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9096(year) - 1.7e+07, female enrollment =  3.01e+04(year) - 5.9e+07) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
 ```
-  Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollment in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, female enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time. 
+Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollment in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, female enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
 
 Things to research for discussion:
 -social changes -- women away from being stay-at-home moms/housekeepers and towards being higher degree earners in the workforce
@@ -161,20 +159,19 @@ female_phd_long <- melt(female_phd_perc, variable.name = "year", value.name = "p
   select(field_long, year_long, percent)
 
 #### create stacked barplot ####
-pdf("Fig2_stacked_bar.pdf", width = 6, height = 3.5)
 female_phd_plot <- ggplot(female_phd_long, aes(x = year_long, y = percent, fill = field_long)) + 
   geom_bar(stat = "identity", colour = "black") +
-  geom_text(aes(x = year_long, y = percent, label = paste0(percent,"%")), size = 2.5,
+  geom_text(aes(x = year_long, y = percent, label = paste0(percent,"%")), size = 4,
             position = position_stack(vjust = 0.5)) +
   theme_classic() +
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 0.7)) +
   scale_y_continuous(expand = c(0,0), limits = c(0,110)) +
   labs(x = "Year", y = "Female PhD Recipients by Field (%)") +
  scale_fill_manual(name = "Field of Study", values = wes_palette(name = "GrandBudapest2", 4, type = c("discrete")))
-female_phd_plot
-dev.off()
 
-# Figure 2 (stacked barplot): Percentage of PhDs awarded to female recipients, by field, from 1985, 2000, & 2015. PhDs awarded to female graduate students in 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) were assessed across 4 focal fields of study: Education, Engineering, Humanities & Arts, Physical & Earth Sciences. The fields in which PhDs were awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r x2_test$parameter`) = `r x2_test$statistic`, *p* < 0.001). Data source: NSF SED.
+female_phd_plot
+
+# Figure stacked barplot: Percentage of PhDs awarded to female recipients, by field, from 1985, 2000, & 2015. PhDs awarded to female graduate students in 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) were assessed across 4 focal fields of study: Education, Engineering, Humanities & Arts, Physical & Earth Sciences. The fields in which PhDs were awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r x2_test$parameter`) = `r x2_test$statistic`, *p* < 0.001). Data source: NSF SED (2015).
 
 #### wrangle data into format for eventual presentation ####
 female_phd_chi2_present <- fields %>%
@@ -187,7 +184,7 @@ female_phd_chi2_present <- fields %>%
   mutate(perc_1985  = round((`1985`/tot_1985) * 100, 1), perc_2000 = round((`2000`/tot_2000) * 100, 1), perc_2015 = round((`2015`/tot_2015) * 100, 1)) %>% # calculate percentage of females within each of the four fields
   select(field, `1985`, perc_1985, `2000`, perc_2000, `2015`, perc_2015)
 
-# Table 2: PhDs awarded to female graduate students, by field and year. Values indicated are counts, with proportions (by field of study) in italics. Data source: NSF SED.
+# Table 2: PhDs awarded to female graduate students, by field and year. Values indicated are counts, with proportions (by field of study) in italics. Data source: NSF SED (2015).
 
 #### wrangle data into format for chi2 test ####
 female_phd2 <- fields %>% 
@@ -308,7 +305,6 @@ fields15_chi
 ```
 
 ```{r specialty line graph} 
-
 line_df <- phd_fields_field %>% 
   filter(year == "1985" |
            year == "2000" |
@@ -323,9 +319,8 @@ line_df <- phd_fields_field %>%
       field == "eng" ~ "Engineering",
       field == "arts" ~ "Humanities & Arts",
       field == "physsci" ~ "Physical & Earth Sciences"
-    ))
+    )) %>% 
   select("Field", "year", "female_prop")
-
 
 physsci <- phd_fields_field %>% 
   filter(field == "physsci") %>% 
@@ -344,9 +339,8 @@ arts <- phd_fields_field %>%
   select("year", "female_prop")
 
 line_x = "Year"
-line_y = "Proportion of female students \nin total population"
+line_y = "Proportion of female students in total population"
 
-pdf("Fig3_lines.pdf", width = 6, height = 3)
 fields_line <- ggplot(line_df, aes(x = year, y = female_prop, group = Field, color = Field)) +
   geom_line() +
   geom_point(size = 3) +
@@ -356,12 +350,12 @@ fields_line <- ggplot(line_df, aes(x = year, y = female_prop, group = Field, col
   theme_bw() +
   theme(panel.grid.minor = element_line(linetype = "blank")) +
   labs(x = line_x, y = line_y)
+  
 fields_line
-dev.off()
 
 #DOES THIS CAPTION MAKE SENSE???
 
-# Figure 3. Proportions of female PhD recipients in four focal fields of study as compared to the total populace of PhD recipients (male & female) across each field. The proportion of PhDs awarded to female graduate students in 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) across the fields of Education, Engineering, Humanities & Arts, and Physical & Earth Sciences, were assessed in relation to the entire PhD student populace in the U.S. in 1985 (n = 16,796), 2000 (n = 21,257), 2015 (n = 26,535). The proportion of men to women PhD students differ signficantly for each year. Data source: NSF SED.
+# Figure X. Proportions of female PhD recipients in four focal fields of study as compared to the total populace of female PhD recipients through time. The proportion of PhDs awarded to female graduate students in 1985 (n = 5,650), 2000 (n = 8,711), and 2015 (n = 10,623) across four focal fields of study: Education, Engineering, Humanities & Arts, and Physical & Earth Sciences, were assessed in relation to the entire PhD student populace in the U.S. in 1985 (n = ), 2000 (n = ), 2015 (n = ). Data source: NSF SED.
 ```
 
 ```{r chi square again}
@@ -411,8 +405,8 @@ arts_x2
 ```  
 
 *Shifts in female PhD recipients by field (1985, 2000, 2015)*
-  To determine if the composition of female PhD recipients has shifted thorugh time, we assessed the proportions of women awarded PhDs across four focal fields of study: Education Engineering, Humanities & Arts, and Physical & Earth Sciences. We found that the types of PhDs awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r x2_test$parameter`) = `r x2_test$statistic`, *p* < 0.001) (Table 1). There has been a growing shift towards STEM fields (engineering and the physical & earth sciences) through time (Fig. 2). While the majority of women received their advanced degrees in either education or the humanities & arts (combined total = 86.4%) in 1985, we see a steady diversification of interests across years with more equal representation across fields in the present day female graduate populace.
-  Despite this diversification among women graduate students, underrepresentation of women in STEM fields across the entire U.S. graduate student populace (males and females) remains an obvious disparity. We found that the proportion of female PhD recipients is significantly different than male PhD recipients across each of the four focal fields (_X_^2^ Education (`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001, _X_^2^ Enineering (`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001, _X_^2^ Humanities & Arts (`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001, _X_^2^ Physical & Earth Sciences (`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001), and that men largely outnumber women in both STEM fields (Engineering, Physical & Earth Sciences) (Table 2???).
+  To determine if the composition of female PhD recipients has shifted thorugh time, we assessed the proportions of women awarded PhDs across four focal fields of study: Education Engineering, Humanities & Arts, and Physical & Earth Sciences. We found that the types of PhDs awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r x2_test$parameter`) = `r x2_test$statistic`, *p* < 0.001). There has been a growing shift towards STEM fields (engineering and the physical & earth sciences) through time (Fig. stacked bar plot). While the majority of women received their advanced degrees in either education or the humanities & arts (combined total = 86.4%) in 1985, we see a steady diversification of interests across years with more equal representation across fields in the present day female graduate populace.
+  Despite this diversification among women graduate students, underrepresentation of women in STEM fields across the entire U.S. graduate student populace (males and females) remains an obvious disparity. We found that the proportion of female PhD recipients is significantly different than male PhD recipients across each of our four focal fields (_X_^2^ Education (`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001, _X_^2^ Enineering (`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001, _X_^2^ Humanities & Arts (`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001, _X_^2 Physical & Earth Sciences ^(`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001) in the years 1985, 2000, and 2015, and that the proportion of men to women in both STEM fields (Engineering, Physical & Earth Sciences) is much higher (Table 2). Women continue to outnumber men in the Education and Humanities & Arts fields (Table 2).
 
 ```{r male & female salaries for starting postdoc and other employment positions (2015)}
 #### make data into long format ####
@@ -442,7 +436,6 @@ postdoc_salary_new <- postdoc_salary_long %>%
 postdoc_salary_new$status<- factor(postdoc_salary_new$status, levels=c("Postdoc-study", "Employed"))
 
 #### boxplot of employment males vs. females & postdoc males vs. females ####
-pdf("Fig4_postdoc_salary.pdf", height = 3, width = 6)
 postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
   geom_boxplot(aes(group = sex, fill = factor(sex))) +
   scale_fill_manual(values = c("white", "darkgrey"), name = "Sex") +
@@ -454,10 +447,10 @@ postdoc_salary_plot <- ggplot(postdoc_salary_new, aes(x = sex, y = salary)) +
     axis.text.x = element_blank(),
     axis.ticks.x=element_blank(),
     panel.border = element_rect(colour = "black", fill=NA, size=0.7))
-postdoc_salary_plot
-dev.off()
 
-# Figure 4: Median annual salary (USD) for doctorate recipients with definite postgraduations plans in the U.S., by sex (2015). Median salary does not significantly differ between males and females, regardless of postgraduation plans (postdoc: `r postdoc_u$parameter`,*p* > 0.05; non-postdoc employment: ` r employed_u$parameter`, *p* > 0.05). Data source: NSF SED (2015).
+postdoc_salary_plot
+
+# Figure 3: Median annual salary (USD) for doctorate recipients with definite postgraduations plans in the U.S., by sex (2015). Median salary does not significantly differ between males and females, regardless of postgraduation plans (*p* > 0.05). Data source: NSF SED (2015).
 
 #### separately subset males & females by employed & postdoc status ####
 male_postdoc <- postdoc_salary_new %>% 
@@ -517,7 +510,7 @@ position_d <- cliff.delta(postdoc$salary, employed$salary) # large
   We examined the salaries of both male and female PhD recipients in postdoc and non-postdoc employment positions to determine if there were pay disparities between sexes. A Mann-Whitney U test reveals no significant difference between salaries made by male and female postdocs (W = `r postdoc_u$parameter`, *p* = `r round(postdoc_u$p.value, 2)`) with a only a negligible effect size (Cliff's delta = `r round(postdoc_d$estimate, 2)`). In spite of overall higher median salaries for PhD recipients in non-postdoc employment positions (W = `r position_u$parameter`, *p* = < 0.001, Cliff's delta = large), the difference between salaries earned by males and females remains nonsignificant (W = `r employed_u$parameter`, *p* = `r round(employed_u$p.value, 2)`) with only a small effect size (Cliff's delta = `r round(employed_u$estimate, 2)`).
   Despite these non-significant differences between sexes, males do recieve higher median salaries than women in comparable positions. We found that male postdocs receive salaries 6.7% greater than female postdocs, and employed males receive salaries 4.8% greater than employed women suggesting that there is still work to be done to close the wage gap between sexes BLAH BLAH CAN'T WRITE WELL ANYMORE...
 
-
+*Modeling faculty salary*
 
 ```{r visualize faculty_salary data}
 #### Look at data ####
@@ -571,10 +564,11 @@ AIC_lm3
 ```
 
 ```{r make table using stargazer}
-stargazer(full_lm1, facsal_lm2, type = "html")
+stargazer(full_lm1, facsal_lm2, facsal_lm3, type = "html")
 # to view, I created a .Rhtml file called "stargazer", deleted all text except for "<html>" tags, copied stargazer output and knitted. You can then copy the produced table into a word document
 ```
 
+<<<<<<< HEAD
 *Modeling faculty salary*
  We sought to predict faculty salary using multiple linear regression given several factors and career-related characterisitcs from data provided by Fox & Weisberg 2011. We built three candidate models (Table X), then selected from them using the following criteria: (1) we estimated goodness of fit using the coefficient of determiniation (R^2^) for each model, (2) we then computed Aikaike Information Criterion (AIC) values to evaluate the relative support for each model, and (3) we finally assessed the validity of including or eliminating each predictor variable based on genearal knowledge of different determinants of salary and prior published literature.
  Our full model includes rank (associate professor, assistant professor, full professor), discipline (theoretical fields, applied fields), years since earning PhD (years_since), years of service as a faculty member (years_service), and sex (male, female) as predictor variables for faculty salary. Because years_since and years_service are moderately correlated, (VIF = 5.9 & 7.5, respectively), we pruned this full model by removing years_since to generate model 2. This choice was made because the number of years experience is often a primary factor considered in salary determination across many fields (cite?). Despite model 2 having a slightly lower fit (R^2^ = 0.441) and marginally higher AIC (AIC = 9096.8) than the full model 1 (R^2^ = 0.446, AIC = 9093.8), we feel more confident in our support of model 2 such that colinearity is not an issue among predictor variables. 
@@ -592,9 +586,11 @@ stargazer(full_lm1, facsal_lm2, type = "html")
     - 65% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp)  
     -	69% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp)  
     -	82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61)  
+=======
+>>>>>>> 60e038bdd7f6bb599109756e85c1ef5a87ecf6b2
 
 **Main Points:**
-  In this report, we analyzed data on female enrollment in doctoral programs and involvement in 4 focal fields of study (Physical Sciences, Engineering, Education, and Humanities and Arts). We also ocmpared salaries of men and women in post-doctoral positions and created a model describing how faculty salaries are influenced by variables relating to gender, rank, and discipline. We find that:
+  In this report, we analyzed data on female enrollment in doctoral programs and involvement in 4 focal fields of study (Physical Sciences, Engineering, Education, and Humanities and Arts). We also compared salaries of men and women in post-doctoral positions and created a model describing how faculty salaries are influenced by variables relating to gender, rank, and discipline. We find that:
   1. female enrollment in PhD programs has surpassed that of men since 1988 (not sure if this is the right year?)
   2. female enrollment in Physical Science and Engineering PhD programs has increased from 1985, but female enrollment in Education PhD programs has decreased and female enrollment in Humanities and Arts PhD programs have remained constant
   3. there is no difference in median salaries of men and women in postdoctoral positions
@@ -606,7 +602,6 @@ stargazer(full_lm1, facsal_lm2, type = "html")
   [some description of model] While the data we have are as much as we can gather, there are missing components that would be useful for parameterizing a model describing faculty salaries. Institution type (e.g. research institutions vs liberal arts colleges, public vs private universities) is a major determinant of professor salaries. In 2016-2017, professors at PhD granting institutions made 20-30% more than professors at liberal arts colleges (cite NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf), and professors at private institutions made 15-20% more than professors at public institutions (also NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf).
   Most egregiously, race is left out as a variable to explore the changing community of graduate students, post-docs, and faculty. In terms of salary, women do indeed make less than men overall (cite NWLC, https://nwlc.org/resources/wage-gap-state-women-overall-2016/), but when comparing within racial groups of women, Black women make 77 cents to the white woman's dollar and Hispanic women make 71 cents to the white woman's dollar (Asian women make 6 cents more per dollar than white women, though comparisons between different ethnic groups of Asian women show differences in pay disparity due in large part to differing societal views on Asian ethnic groups, cite IWPR https://iwpr.org/publications/gender-wage-gap-occupation-2017-race-ethnicity/). Clearly, racial comparisons even within genders warrant exploration, since there are huge gaps in wages between racial groups.  
   In terms of higher education, the gap between races is even more stark. 65% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp), 69% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp), and 82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61). With each step up in academic rank, the proportion of people of color diminishes.  
->>>>>>> c344e4c10354e1215668ffae00c17bc94855cb79
     - Race also informs rank, cite cultural taxation literature (https://www.jstor.org/stable/1176259)
     The reality is that, while awareness of the issue is a logical first step, this is an institutional problem that is larger than any one individual can take on. The much needed revolution for gender equality in academia will come from active recruitment of candidates with a track record of allyship and advocacy for gender equality. As Audre Lorde states of the misappropriation of Black women as "tokens" in academia, "the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change" (cite Lorde). Just as we cannot continue to pay lip service to Black scholars to satisfy a diversity quota, we cannot continue to hire faculty who are uncommitted to enacting change in the academic community. Superficiality will never lead to real reform; targeted, focused searches for junior faculty who are willing to take a stand for social issues in the institution.  
   
