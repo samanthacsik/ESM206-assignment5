@@ -68,7 +68,7 @@ total <- rbind(total_males, total_females)
 #   labs(x = "Year", y = "Total Male & Female Graduate Student \nEnrollment in the U.S.") +
 #   scale_y_continuous(labels = scales::scientific) 
 
-
+pdf("Fig1_enrollment.pdf", width = 6, height = 4)
 total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color = sex)) +
   geom_point(size = 2, alpha = 0.5) +
   geom_smooth(method = "lm") +
@@ -103,8 +103,10 @@ total_enroll_plot <- ggplot(total, aes(x = year, y = total, shape = sex, color =
            parse = TRUE, 
            family = "Times New Roman", 
            size = 3) 
-
 total_enroll_plot
+dev.off()
+
+
 # Figure 1. Relationship between year and graduate student enrollment for both males and females (1967-2015). Year significantly predicts graduate student enrollment in the U.S. for both males (*b* = 9096, t(47) = 16.61, *p* <0.001) and females (*b* =  3.013e+04, t(47) = 51.66, *p* < 0.001) with a strong positive correlation between year and both sexes (Pearson's *r* (males) = 0.92, Pearson's *r* (females) =  0.99). The overall models (male enrollment = 9096(year) - 1.7e+07, female enrollment =  3.01e+04(year) - 5.9e+07) explain a significant amount of variance in salary for males (F(1,47) = 276, *p* < 0.001), R^2^ = 0.85 and females (F(1,47) = 2669, *p* < 0.001, R^2^ = 0.98). Gray region is the 95% confidence interval for the mean predicted values.
 
 ##############################
@@ -153,7 +155,7 @@ perc_females <- ((f_2015$total - f_1967$total)/f_1967$total) * 100 # % increase 
 # findings
 ##############################
 
-# CREATE TALE OF MALE & FEMALE RAW VALUES FOR 1967 & 2015 IN WORD DOC
+# CREATE TABLE OF MALE & FEMALE RAW VALUES FOR 1967 & 2015 IN WORD DOC
 ```
 
 Since 1967, there has been an overall increase in total (part-time, full-time, private, public) graduate student enrollment in the United States (Table 1, Fig. 1). Year is highly correlated with both male (Pearson's *r* = 0.92) and female (Pearson's *r* = 0.99) enrollemnt in graduate programs, though female enrollment has risen at a much faster rate (30,100 students/year) than males (9,096 students/year). As a result, females enrollment in 2015 was 6.5 times greater than in 1967, as compared to the 1.9 fold increase observed for males over the same period of time (Table 1). 
@@ -165,6 +167,23 @@ Things to research for discussion:
 ```{r shifts in female PhD recipients by field (1985, 2000, 2015)--Sam's plot and chi square}
 
 #SOURCE: National Science Foundation, National Center for Science and Engineering Statistics, Survey of Earned Doctorates. You can find more information here: https:// www.nsf.gov/ statistics/ srvydoctorates/ .
+
+male_female_phd <- fields %>% 
+  filter(field == "phys_earth_female" |
+           field == "phys_earth_male" |
+           field == "engineering_female" | 
+           field == "engineering_male" |
+           field == "edu_female" | 
+           field == "edu_male" |
+           field == "humanities_arts_female" |
+           field == "humanities_arts_male") %>% 
+  select(field, `1985_raw`, `2000_raw`, `2015_raw`) %>% 
+  rename(`1985` = `1985_raw`, `2000` = `2000_raw`, `2015` = `2015_raw`) %>% 
+  mutate(
+    total_85 = sum(`1985`),
+    total_00 = sum(`2000`),
+    total_15 = sum(`2015`)
+  )
 
 ##############################
 # subset out females by field from years 1985, 2000, 2015
