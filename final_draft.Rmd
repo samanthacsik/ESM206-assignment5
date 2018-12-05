@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE)
 **Data & Methods:**
   All data were analyzed using R version 3.5.1. We first investigated changes in graduate student enrollment in the United States using data provided by the National Center for Education Statistics (NCES) (cite). We modeled the relationship between year and male and female graduate student enrollment between 1967 and 2015 by fitting linear equations to data on each sex and comparing the rate of change between the two groups.
   Using data provided by the National Scienc Foundatio's (NSF) Survey of Earned Doctorates (cite), we assessed changes in female graduate student research interests across four fields of study--education, engineering, humanities & arts, and the physical & earth sciences--between 1985, 2000, and 2015. A chi-squared test was used to determine whether there was a significant association between year and the type of PhDs awarded to women to evalue a shift in research interests through time. ADD AN'S ANALYSIS HERE. To determine if there are presently (2015) pay disparities between men and women with graduate degrees, we then compared salaries between the sexes in both postdoc and non-postdoc employment positions using a Mann-Whitney U test ($alpha$ = 0.05).
-  We lastly constructed a multivariate linear model to describe faculty salary based on X, Y, Z. We later suggest additional parameters that we believe may help to better inform our model.
+  We lastly use multiple linear regression to describe faculty salary based on X, Y, Z. We later suggest additional parameters that we believe may help to better inform our model.
  
 **Analysis & Discussion**
 ```{r load packages and data, include = FALSE}
@@ -407,7 +407,7 @@ arts_x2
 
 *Shifts in female PhD recipients by field (1985, 2000, 2015)*
   To determine if the composition of female PhD recipients has shifted thorugh time, we assessed the proportions of women awarded PhDs across four focal fields of study: Education Engineering, Humanities & Arts, and Physical & Earth Sciences. We found that the types of PhDs awarded differ significantly for female recipients in the years 1985, 2000, and 2015 ($\chi^2$(`r x2_test$parameter`) = `r x2_test$statistic`, *p* < 0.001). There has been a growing shift towards STEM fields (engineering and the physical & earth sciences) through time (Fig. stacked bar plot). While the majority of women received their advanced degrees in either education or the humanities & arts (combined total = 86.4%) in 1985, we see a steady diversification of interests across years with more equal representation across fields in the present day female graduate populace.
-  Despite this diversification among women graduate students, underrepresentation of women in STEM fields across the entire U.S. graduate student populace (males and females) remains an obvious disparity. We found that the proportion of female PhD recipients is significantly different than male PhD recipients across each of our four focal fields (_X_^2^ Education (`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001, _X_^2^ Enineering (`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001, _X_^2^ Humanities & Arts (`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001, _X_^2 Physical & Earth Sciences ^(`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001) in the years 1985, 2000, and 2015, and that the proportion of men to women in both STEM fields (Engineering, Physical & Earth Sciences) is much higher (Table 2). Women continue to outnumber men in the Education and Humanities & Arts fields (Table 2).
+  Despite this diversification among women graduate students, underrepresentation of women in STEM fields across the entire U.S. graduate student populace (males and females) remains an obvious disparity. We found that the proportion of female PhD recipients is significantly different than male PhD recipients across each of our four focal fields (_X_^2^ Education (`r edu_x2$parameter`) = `r edu_x2$statistic`, _p_ < 0.001, _X_^2^ Enineering (`r eng_x2$parameter`) = `r eng_x2$statistic`, _p_ < 0.001, _X_^2^ Humanities & Arts (`r arts_x2$parameter`) = `r arts_x2$statistic`, _p_ < 0.001, _X_^2^ Physical & Earth Sciences (`r physsci_x2$parameter`) = `r physsci_x2$statistic`, _p_ < 0.001), and that men largely outnumber women in both STEM fields (Engineering, Physical & Earth Sciences) (Table 2).
 
 ```{r male & female salaries for starting postdoc and other employment positions (2015)}
 #### make data into long format ####
@@ -511,7 +511,7 @@ position_d <- cliff.delta(postdoc$salary, employed$salary) # large
   We examined the salaries of both male and female PhD recipients in postdoc and non-postdoc employment positions to determine if there were pay disparities between sexes. A Mann-Whitney U test reveals no significant difference between salaries made by male and female postdocs (W = `r postdoc_u$parameter`, *p* = `r round(postdoc_u$p.value, 2)`) with a only a negligible effect size (Cliff's delta = `r round(postdoc_d$estimate, 2)`). In spite of overall higher median salaries for PhD recipients in non-postdoc employment positions (W = `r position_u$parameter`, *p* = < 0.001, Cliff's delta = large), the difference between salaries earned by males and females remains nonsignificant (W = `r employed_u$parameter`, *p* = `r round(employed_u$p.value, 2)`) with only a small effect size (Cliff's delta = `r round(employed_u$estimate, 2)`).
   Despite these non-significant differences between sexes, males do recieve higher median salaries than women in comparable positions. We found that male postdocs receive salaries 6.7% greater than female postdocs, and employed males receive salaries 4.8% greater than employed women suggesting that there is still work to be done to close the wage gap between sexes BLAH BLAH CAN'T WRITE WELL ANYMORE...
 
-*Modeling faculty salary*
+
 
 ```{r visualize faculty_salary data}
 #### Look at data ####
@@ -565,11 +565,13 @@ AIC_lm3
 ```
 
 ```{r make table using stargazer}
-stargazer(full_lm1, facsal_lm2, facsal_lm3, type = "html")
+stargazer(full_lm1, facsal_lm2, type = "html")
 # to view, I created a .Rhtml file called "stargazer", deleted all text except for "<html>" tags, copied stargazer output and knitted. You can then copy the produced table into a word document
 ```
 
-
+*Modeling faculty salary*
+ We sought to predict faculty salary using multiple linear regression given several factors and career-related characterisitcs from data provided by Fox & Weisberg 2011. We built three candidate models (Table X), then selected from them using the following criteria: (1) we estimated goodness of fit using the coefficient of determiniation (R^2^) for each model, (2) we then computed Aikaike Information Criterion (AIC) values to evaluate the relative support for each model, and (3) we finally assessed the validity of including or eliminating each predictor variable based on genearal knowledge of different determinants of salary and prior published literature.
+ Our full model includes rank (associate professor, assistant professor, full professor), discipline (theoretical fields, applied fields), years since earning PhD (years_since), years of service as a faculty member (years_service), and sex (male, female) as predictor variables for faculty salary. Because years_since and years_service are moderately correlated, (VIF = 5.9 & 7.5, respectively), we pruned this full model by removing years_since to generate model 2. This choice was made because the number of years experience is often a primary factor considered in salary determination across many fields (cite?). Despite model 2 having a slightly lower fit (R^2^ = 0.441) and marginally higher AIC (AIC = 9096.8) than the full model 1 (R^2^ = 0.446, AIC = 9093.8), we feel more confident in our support of model 2 such that colinearity is not an issue among predictor variables. 
 
 **Conclusion:**
 -	Female involvement in higher education has improved, but there are still steps to be made for progress  

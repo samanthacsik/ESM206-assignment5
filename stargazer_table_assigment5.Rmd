@@ -88,6 +88,6 @@ AIC_lm3
 ```
 
 ```{r make table using stargazer}
-stargazer(full_lm1, facsal_lm2, facsal_lm3, type = "html")
+stargazer(full_lm1, facsal_lm2, type = "html")
 ```
 
