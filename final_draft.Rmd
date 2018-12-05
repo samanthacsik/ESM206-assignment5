@@ -569,7 +569,14 @@ stargazer(full_lm1, facsal_lm2, facsal_lm3, type = "html")
 ```
 
 
-**Discussion, Caveats, and Calls to Action:**
+**Main Points:**
+  In this report, we analyzed data on female enrollment in doctoral programs and involvement in 4 focal fields of study (Physical Sciences, Engineering, Education, and Humanities and Arts). We also ocmpared salaries of men and women in post-doctoral positions and created a model describing how faculty salaries are influenced by variables relating to gender, rank, and discipline. We find that:
+  1. female enrollment in PhD programs has surpassed that of men since 1988 (not sure if this is the right year?)
+  2. female enrollment in Physical Science and Engineering PhD programs has increased from 1985, but female enrollment in Education PhD programs has decreased and female enrollment in Humanities and Arts PhD programs have remained constant
+  3. there is no difference in median salaries of men and women in postdoctoral positions
+  4. [something about the model]
+  
+**Discussion, Caveats, Calls to Action**
   [some description of model] While the data we have are as much as we can gather, there are missing components that would be useful for parameterizing a model describing faculty salaries. Institution type (e.g. research institutions vs liberal arts colleges, public vs private universities) is a major determinant of professor salaries. In 2016-2017, professors at PhD granting institutions made 20-30% more than professors at liberal arts colleges (cite NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf), and professors at private institutions made 15-20% more than professors at public institutions (also NEA, http://www.nea.org/assets/docs/3-2018%20Almanac%20Clery.pdf).
   Most egregiously, race is left out as a variable to calculate faculty salaries, but it is undeniably a factor in stratifying salaries. Women do indeed make less than men overall (cite NWLC, https://nwlc.org/resources/wage-gap-state-women-overall-2016/), but when comparing salaries within racial groups of women, Black women make 77 cents to the white woman's dollar and Hispanic women make 71 cents to the white woman's dollar (Asian women make 6 cents more per dollar than white women, though comparisons between different ethnic groups of Asian women show differences in pay disparity due in large part to differing societal views on Asian ethnic groups, cite IWPR https://iwpr.org/publications/gender-wage-gap-occupation-2017-race-ethnicity/). Clearly, racial comparisons even within genders warrant exploration, since there are huge gaps in wages between racial groups.  
   In terms of higher education, the gap between races is even more stark. 65% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp), 69% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp), and 82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61). With each step up in postsecondary education, the proportion of people of color diminishes.  
