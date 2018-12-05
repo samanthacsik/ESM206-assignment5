@@ -592,7 +592,6 @@ stargazer(full_lm1, facsal_lm2, type = "html")
     - 65% of Bachelor’s degrees conferred are to white students (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_322.20.asp)  
     -	69% of PhD recipients are white (cite table, https://nces.ed.gov/programs/digest/d17/tables/dt17_324.20.asp)  
     -	82% of professors are white (55% men, 27% women, cite figure, https://nces.ed.gov/fastfacts/display.asp?id=61)  
-=======
 
 **Main Points:**
   In this report, we analyzed data on female enrollment in doctoral programs and involvement in 4 focal fields of study (Physical Sciences, Engineering, Education, and Humanities and Arts). We also ocmpared salaries of men and women in post-doctoral positions and created a model describing how faculty salaries are influenced by variables relating to gender, rank, and discipline. We find that:
